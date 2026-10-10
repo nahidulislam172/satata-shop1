@@ -1,0 +1,483 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Panel | সত্যতা সপ</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f6f8;color:#1f2937;font-family:Arial,sans-serif}
+header{background:#123c2b;color:white;padding:18px}
+header h2{margin:0 0 5px}
+header p{margin:0;font-size:13px}
+main{max-width:1100px;margin:auto;padding:16px}
+.card{background:white;border-radius:12px;padding:17px;margin-bottom:16px;box-shadow:0 2px 10px #0001}
+input,textarea,select{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #ccd3dd;border-radius:7px;font-size:15px;background:white}
+label{font-size:14px;font-weight:bold}
+button{padding:11px 14px;border:0;border-radius:7px;background:#14764b;color:white;font-weight:bold;cursor:pointer;margin:3px}
+button.secondary{background:#46546a}
+button.danger{background:#b52c36}
+button:disabled{opacity:.5}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.stat{background:white;padding:15px;border-radius:10px;box-shadow:0 2px 8px #0001;overflow-wrap:anywhere}
+.stat strong{display:block;font-size:24px;margin-top:8px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.item{padding:13px 0;border-bottom:1px solid #e5e7eb}
+.item:last-child{border-bottom:0}
+.muted{color:#64748b;font-size:13px}
+.msg{padding:11px;border-radius:7px;background:#edf3ff;margin:10px 0;overflow-wrap:anywhere}
+.error{background:#fff0f0;color:#a32323}
+.hidden{display:none!important}
+img.product{width:60px;height:60px;object-fit:cover;border-radius:8px}
+h3{margin-top:0}
+@media(max-width:650px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:10px}.card{padding:13px}}
+</style>
+</head>
+<body>
+<header>
+  <h2>সত্যতা সপ | Admin Panel</h2>
+  <p>পণ্য, অর্ডার ও বিক্রির ব্যবস্থাপনা</p>
+</header>
+
+<main>
+  <section id="loginBox" class="card">
+    <h3>অ্যাডমিন লগইন</h3>
+    <p class="muted">শুধু অনুমোদিত অ্যাডমিন অ্যাকাউন্ট ব্যবহার করুন।</p>
+    <form id="loginForm">
+      <label for="email">ইমেইল</label>
+      <input id="email" type="email" autocomplete="username" required>
+      <label for="password">পাসওয়ার্ড</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+      <button id="loginBtn" type="submit">লগইন</button>
+    </form>
+    <div id="loginMsg" class="msg hidden"></div>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="card">
+      <div class="row">
+        <div>
+          <h3>অ্যাডমিন ড্যাশবোর্ড</h3>
+          <div id="adminEmail" class="muted"></div>
+        </div>
+        <button id="logoutBtn" class="danger">লগআউট</button>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-bottom:16px">
+      <div class="stat">মোট পণ্য<strong id="productCount">0</strong></div>
+      <div class="stat">মোট অর্ডার<strong id="orderCount">0</strong></div>
+      <div class="stat">অপেক্ষমাণ<strong id="pendingCount">0</strong></div>
+      <div class="stat">বিক্রির মোট<strong id="salesTotal">৳0</strong></div>
+    </div>
+
+    <section class="card">
+      <h3 id="productFormTitle">নতুন পণ্য যোগ করুন</h3>
+      <form id="productForm">
+        <input id="productId" type="hidden">
+        <label for="pName">পণ্যের নাম</label>
+        <input id="pName" required maxlength="120" placeholder="যেমন: টি-শার্ট">
+        <label for="pPrice">বিক্রয়মূল্য (৳)</label>
+        <input id="pPrice" type="number" min="0" step="0.01" required>
+        <label for="pStock">স্টক সংখ্যা</label>
+        <input id="pStock" type="number" min="0" step="1" required>
+        <label for="pCategory">ক্যাটাগরি</label>
+        <input id="pCategory" maxlength="80" placeholder="যেমন: পোশাক">
+        <label for="pImage">ছবির HTTPS লিংক</label>
+        <input id="pImage" type="url" placeholder="https://...">
+        <label for="pDescription">বিস্তারিত</label>
+        <textarea id="pDescription" rows="3" maxlength="2000"></textarea>
+        <button id="saveProductBtn" type="submit">পণ্য সেভ করুন</button>
+        <button id="cancelEditBtn" class="secondary hidden" type="button">সম্পাদনা বাতিল</button>
+      </form>
+      <p class="muted">এই ফর্মে ছবির লিংক দেওয়া যায়। সরাসরি ছবি আপলোডের জন্য পরে Firebase Storage যুক্ত করতে হবে।</p>
+      <div id="productMsg" class="msg hidden"></div>
+    </section>
+
+    <section class="card">
+      <div class="row"><h3>পণ্যের তালিকা</h3><button id="refreshProducts" class="secondary">রিফ্রেশ</button></div>
+      <div id="productsList">লোড হচ্ছে...</div>
+    </section>
+
+    <section class="card">
+      <div class="row"><h3>কাস্টমারের অর্ডার</h3><button id="refreshOrders" class="secondary">রিফ্রেশ</button></div>
+      <div class="muted">নতুন অর্ডার দেখতে রিফ্রেশ করুন।</div>
+      <div id="ordersList">লোড হচ্ছে...</div>
+    </section>
+  </section>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {
+  getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import {
+  getFirestore, collection, doc, getDoc, getDocs, addDoc,
+  updateDoc, deleteDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDHHTt4EFkH_H5xc2q2rGTC2piSCjOJuKM",
+  authDomain: "satata-shop.firebaseapp.com",
+  projectId: "satata-shop",
+  storageBucket: "satata-shop.firebasestorage.app",
+  messagingSenderId: "964264833764",
+  appId: "1:964264833764:web:7c77ae2f3cb8c782abf2f1",
+  measurementId: "G-1H2H45YG3D"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+let currentUser = null;
+let products = [];
+let orders = [];
+let busy = false;
+
+function message(id, text, isError=false) {
+  const el = $(id);
+  el.textContent = text;
+  el.classList.remove("hidden", "error");
+  if (isError) el.classList.add("error");
+}
+function clearMessage(id) {
+  $(id).textContent = "";
+  $(id).classList.add("hidden");
+  $(id).classList.remove("error");
+}
+function safeText(value) {
+  return String(value ?? "");
+}
+function money(value) {
+  return "৳" + (Number(value) || 0).toLocaleString("en-BD");
+}
+function friendlyError(error) {
+  const code = error?.code || "";
+  const messages = {
+    "auth/invalid-credential":"ইমেইল বা পাসওয়ার্ড সঠিক নয়।",
+    "auth/invalid-email":"ইমেইল ঠিকানাটি সঠিক নয়।",
+    "auth/too-many-requests":"অনেকবার চেষ্টা হয়েছে। পরে আবার চেষ্টা করুন।",
+    "auth/network-request-failed":"ইন্টারনেট সংযোগ পরীক্ষা করুন।",
+    "permission-denied":"অনুমতি নেই। Firebase Security Rules ও অ্যাডমিন অনুমোদন পরীক্ষা করুন।",
+    "unavailable":"সার্ভার সংযোগ পাওয়া যাচ্ছে না। পরে আবার চেষ্টা করুন।"
+  };
+  return messages[code] || ("সমস্যা হয়েছে: " + (error?.message || "অজানা ত্রুটি"));
+}
+function showLogin() {
+  $("loginBox").classList.remove("hidden");
+  $("dashboard").classList.add("hidden");
+}
+function showDashboard() {
+  $("loginBox").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("adminEmail").textContent = currentUser?.email || "";
+}
+function resetProductForm() {
+  $("productForm").reset();
+  $("productId").value = "";
+  $("productFormTitle").textContent = "নতুন পণ্য যোগ করুন";
+  $("saveProductBtn").textContent = "পণ্য সেভ করুন";
+  $("cancelEditBtn").classList.add("hidden");
+  clearMessage("productMsg");
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage("loginMsg");
+  $("loginBtn").disabled = true;
+  try {
+    await signInWithEmailAndPassword(
+      auth, $("email").value.trim(), $("password").value
+    );
+  } catch (error) {
+    message("loginMsg", friendlyError(error), true);
+  } finally {
+    $("loginBtn").disabled = false;
+  }
+});
+
+$("logoutBtn").addEventListener("click", async () => {
+  await signOut(auth);
+});
+
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+  if (!user) {
+    showLogin();
+    return;
+  }
+
+  try {
+    // অ্যাডমিন অনুমোদন admins/{Firebase Auth UID} ডকুমেন্টে যাচাই করা হয়।
+    const adminRef = doc(db, "admins", user.uid);
+    const adminSnap = await getDoc(adminRef);
+
+    if (!adminSnap.exists() || adminSnap.data().active !== true) {
+      message(
+        "loginMsg",
+        "এই অ্যাকাউন্টটি এখনো অ্যাডমিন হিসেবে অনুমোদিত নয়। Firebase Console-এ admins/" +
+        user.uid + " ডকুমেন্টে active: true সেট করতে হবে।",
+        true
+      );
+      await signOut(auth);
+      return;
+    }
+
+    showDashboard();
+    await loadAll();
+  } catch (error) {
+    showLogin();
+    message("loginMsg", friendlyError(error), true);
+  }
+});
+
+async function loadProducts() {
+  const snap = await getDocs(collection(db, "products"));
+  products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderProducts();
+}
+function renderProducts() {
+  $("productCount").textContent = products.length;
+  const root = $("productsList");
+  root.replaceChildren();
+
+  if (!products.length) {
+    root.textContent = "এখনো কোনো পণ্য নেই। উপরের ফর্ম থেকে পণ্য যোগ করুন।";
+    return;
+  }
+
+  products.forEach(p => {
+    const item = document.createElement("div");
+    item.className = "item";
+    const row = document.createElement("div");
+    row.className = "row";
+
+    const details = document.createElement("div");
+    details.style.flex = "1";
+    details.style.minWidth = "150px";
+
+    if (p.image) {
+      const img = document.createElement("img");
+      img.className = "product";
+      img.src = p.image;
+      img.alt = safeText(p.name);
+      img.loading = "lazy";
+      img.referrerPolicy = "no-referrer";
+      details.append(img);
+    }
+
+    const title = document.createElement("strong");
+    title.textContent = safeText(p.name) || "নামহীন পণ্য";
+    const info = document.createElement("div");
+    info.className = "muted";
+    info.textContent = money(p.price) + " · স্টক: " + (Number(p.stock) || 0);
+    details.append(title, info);
+
+    const actions = document.createElement("div");
+    const edit = document.createElement("button");
+    edit.textContent = "সম্পাদনা";
+    edit.className = "secondary";
+    edit.addEventListener("click", () => editProduct(p.id));
+
+    const del = document.createElement("button");
+    del.textContent = "মুছুন";
+    del.className = "danger";
+    del.addEventListener("click", () => removeProduct(p.id));
+
+    actions.append(edit, del);
+    row.append(details, actions);
+    item.append(row);
+    root.append(item);
+  });
+}
+
+$("productForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (busy) return;
+  busy = true;
+  $("saveProductBtn").disabled = true;
+  clearMessage("productMsg");
+
+  const id = $("productId").value;
+  const product = {
+    name: $("pName").value.trim(),
+    price: Number($("pPrice").value),
+    stock: Number($("pStock").value),
+    category: $("pCategory").value.trim(),
+    image: $("pImage").value.trim(),
+    description: $("pDescription").value.trim(),
+    updatedAt: serverTimestamp()
+  };
+
+  try {
+    if (!product.name || !Number.isFinite(product.price) ||
+        product.price < 0 || !Number.isInteger(product.stock) ||
+        product.stock < 0) {
+      throw new Error("পণ্যের নাম, মূল্য ও স্টক সঠিকভাবে দিন।");
+    }
+    if (product.image && !/^https:\/\//i.test(product.image)) {
+      throw new Error("ছবির লিংক অবশ্যই HTTPS হতে হবে।");
+    }
+
+    if (id) {
+      await updateDoc(doc(db, "products", id), product);
+      message("productMsg", "পণ্য আপডেট হয়েছে।");
+    } else {
+      product.createdAt = serverTimestamp();
+      await addDoc(collection(db, "products"), product);
+      message("productMsg", "নতুন পণ্য যোগ হয়েছে।");
+    }
+    resetProductForm();
+    await loadProducts();
+  } catch (error) {
+    message("productMsg", friendlyError(error), true);
+  } finally {
+    busy = false;
+    $("saveProductBtn").disabled = false;
+  }
+});
+
+function editProduct(id) {
+  const p = products.find(item => item.id === id);
+  if (!p) return;
+  $("productId").value = p.id;
+  $("pName").value = p.name || "";
+  $("pPrice").value = p.price ?? 0;
+  $("pStock").value = p.stock ?? 0;
+  $("pCategory").value = p.category || "";
+  $("pImage").value = p.image || "";
+  $("pDescription").value = p.description || "";
+  $("productFormTitle").textContent = "পণ্য সম্পাদনা";
+  $("saveProductBtn").textContent = "পরিবর্তন সেভ করুন";
+  $("cancelEditBtn").classList.remove("hidden");
+  $("productFormTitle").scrollIntoView({behavior:"smooth"});
+}
+$("cancelEditBtn").addEventListener("click", resetProductForm);
+
+async function removeProduct(id) {
+  if (!confirm("এই পণ্যটি মুছে ফেলতে চান?")) return;
+  try {
+    await deleteDoc(doc(db, "products", id));
+    await loadProducts();
+  } catch (error) {
+    alert(friendlyError(error));
+  }
+}
+
+const statusOptions = [
+  ["pending","অপেক্ষমাণ"],
+  ["confirmed","নিশ্চিত"],
+  ["packaging","প্যাকেজিং"],
+  ["shipped","পাঠানো হয়েছে"],
+  ["delivered","ডেলিভারি সম্পন্ন"],
+  ["cancelled","বাতিল"]
+];
+const statusNames = Object.fromEntries(statusOptions);
+
+async function loadOrders() {
+  const snap = await getDocs(collection(db, "orders"));
+  orders = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+  renderOrders();
+}
+function renderOrders() {
+  $("orderCount").textContent = orders.length;
+  $("pendingCount").textContent = orders.filter(o =>
+    ["pending","received"].includes(o.status || "pending")
+  ).length;
+
+  const total = orders.filter(o => o.status !== "cancelled")
+    .reduce((sum,o) => sum + (Number(o.totalPrice ?? o.total ?? 0) || 0), 0);
+  $("salesTotal").textContent = money(total);
+
+  const root = $("ordersList");
+  root.replaceChildren();
+  if (!orders.length) {
+    root.textContent = "এখনো কোনো অর্ডার নেই।";
+    return;
+  }
+
+  orders.forEach(o => {
+    const item = document.createElement("div");
+    item.className = "item";
+
+    const name = document.createElement("strong");
+    name.textContent = safeText(o.customerName || o.name || "নাম নেই");
+
+    const info = document.createElement("div");
+    info.className = "muted";
+    info.textContent = "অর্ডার আইডি: " + o.id;
+
+    const phone = document.createElement("div");
+    phone.textContent = "মোবাইল: " + safeText(o.mobile || o.phone || "নেই");
+
+    const address = document.createElement("div");
+    address.textContent = "ঠিকানা: " + [
+      o.village, o.thana, o.district, o.address
+    ].filter(Boolean).join(", ");
+
+    const price = document.createElement("div");
+    price.textContent = "মোট: " + money(o.totalPrice ?? o.total ?? 0);
+
+    const status = document.createElement("div");
+    status.className = "muted";
+    status.textContent = "বর্তমান অবস্থা: " +
+      (statusNames[o.status] || o.status || "অপেক্ষমাণ");
+
+    const select = document.createElement("select");
+    statusOptions.forEach(([value,label]) => {
+      const opt = document.createElement("option");
+      opt.value = value;
+      opt.textContent = label;
+      if ((o.status || "pending") === value) opt.selected = true;
+      select.append(opt);
+    });
+
+    const save = document.createElement("button");
+    save.textContent = "স্ট্যাটাস সেভ";
+    save.addEventListener("click", async () => {
+      save.disabled = true;
+      try {
+        await updateDoc(doc(db, "orders", o.id), {
+          status: select.value,
+          updatedAt: serverTimestamp()
+        });
+        await loadOrders();
+      } catch (error) {
+        alert(friendlyError(error));
+      } finally {
+        save.disabled = false;
+      }
+    });
+
+    item.append(name, info, phone, address, price, status, select, save);
+    root.append(item);
+  });
+}
+
+async function loadAll() {
+  $("productsList").textContent = "লোড হচ্ছে...";
+  $("ordersList").textContent = "লোড হচ্ছে...";
+  try {
+    await Promise.all([loadProducts(), loadOrders()]);
+  } catch (error) {
+    const text = friendlyError(error);
+    $("productsList").textContent = text;
+    $("ordersList").textContent = text;
+  }
+}
+
+$("refreshProducts").addEventListener("click", async () => {
+  try { await loadProducts(); }
+  catch(error) { alert(friendlyError(error)); }
+});
+$("refreshOrders").addEventListener("click", async () => {
+  try { await loadOrders(); }
+  catch(error) { alert(friendlyError(error)); }
+});
+</script>
+</body>
+</html>
