@@ -1,0 +1,590 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087b48">
+<title>সত্যতা সপ | অনলাইন শপ</title>
+
+<style>
+*{box-sizing:border-box}
+:root{
+ --green:#087b48;
+ --dark:#075631;
+ --light:#effaf3;
+ --orange:#ffb13b;
+ --text:#202820;
+}
+body{
+ margin:0;
+ font-family:Arial,"Noto Sans Bengali",sans-serif;
+ background:#f5f8f5;
+ color:var(--text);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+header{
+ position:sticky;top:0;z-index:10;
+ display:flex;align-items:center;justify-content:space-between;
+ gap:10px;padding:12px 15px;background:white;
+ box-shadow:0 2px 10px #00000010;
+}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{
+ width:44px;height:44px;border-radius:12px;
+ display:grid;place-items:center;
+ background:var(--green);color:white;font-size:25px;font-weight:bold;
+}
+.brand h1{margin:0;color:var(--green);font-size:20px}
+.brand small{font-size:11px;color:#777}
+.menu-btn{
+ border:0;background:var(--light);color:var(--green);
+ font-size:25px;border-radius:9px;padding:4px 12px;
+}
+nav{
+ display:none;background:white;padding:12px;
+ grid-template-columns:1fr 1fr;gap:8px;
+}
+nav.open{display:grid}
+nav a{
+ padding:11px;text-decoration:none;color:var(--dark);
+ background:var(--light);border-radius:8px;font-size:14px;
+}
+main{max-width:1100px;margin:auto;padding:14px}
+.hero{
+ border-radius:18px;padding:25px 19px;color:white;
+ background:linear-gradient(130deg,#064d30,#12a35e);
+}
+.hero-tag{
+ display:inline-block;background:#ffffff25;
+ padding:6px 10px;border-radius:20px;font-size:12px;
+}
+.hero h2{font-size:29px;line-height:1.45;margin:13px 0 8px}
+.hero p{line-height:1.7;font-size:14px}
+.primary,.secondary{
+ border:0;border-radius:10px;padding:12px 15px;font-weight:bold;
+}
+.primary{background:var(--orange);color:#342100}
+.secondary{background:var(--green);color:white}
+.search{margin:17px 0}
+.search input{
+ width:100%;padding:14px;border:1px solid #dce6dd;
+ border-radius:11px;background:white;
+}
+.section{margin:25px 0}
+.section-title{
+ display:flex;justify-content:space-between;align-items:center;
+ gap:8px;margin-bottom:13px;
+}
+.section-title h2{font-size:20px;margin:0}
+.muted{font-size:12px;color:#737d75}
+.categories{
+ display:flex;gap:8px;overflow-x:auto;padding:3px 0 10px;
+}
+.cat{
+ flex-shrink:0;border:1px solid #dce8df;background:white;
+ color:#334a39;padding:10px 13px;border-radius:25px;
+}
+.cat.active{background:var(--green);color:white}
+.grid{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
+}
+.product{
+ overflow:hidden;background:white;border:1px solid #e9eee9;
+ border-radius:13px;box-shadow:0 3px 12px #00000008;
+}
+.product-img{
+ height:125px;display:grid;place-items:center;font-size:48px;
+ background:linear-gradient(135deg,#e4f6e9,#fff0dc);
+}
+.product-info{padding:10px}
+.product-info h3{font-size:14px;line-height:1.5;margin:5px 0}
+.badge{
+ display:inline-block;background:#fff1d8;color:#85500a;
+ padding:4px 7px;border-radius:5px;font-size:11px;
+}
+.price{font-size:17px;color:var(--green);font-weight:bold;margin-top:7px}
+.stock{font-size:12px;color:#737d75;margin:6px 0}
+.product button{width:100%;font-size:13px}
+.panel{
+ background:white;border:1px solid #e6eee7;
+ border-radius:13px;padding:15px;
+}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info-item{background:var(--light);padding:13px;border-radius:10px}
+.info-item b{display:block;margin-bottom:6px}
+.support-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.support-link{
+ display:block;text-align:center;text-decoration:none;
+ padding:13px 8px;background:var(--light);
+ color:var(--dark);border-radius:10px;font-weight:bold;
+}
+footer{
+ background:#123b29;color:#eaf6ed;text-align:center;
+ padding:24px 12px;line-height:1.9;font-size:13px;
+}
+.modal{
+ display:none;position:fixed;inset:0;z-index:50;
+ background:#0009;padding:12px;overflow-y:auto;
+ align-items:flex-start;justify-content:center;
+}
+.modal.show{display:flex}
+.modal-box{
+ width:100%;max-width:520px;margin:auto;
+ background:#f8faf8;border-radius:16px;padding:17px;
+}
+.modal-head{
+ display:flex;justify-content:space-between;align-items:center;
+ gap:8px;margin-bottom:14px;
+}
+.modal-head h2{margin:0;font-size:20px;color:var(--green)}
+.close{
+ border:0;background:#e8eee9;border-radius:8px;
+ font-size:22px;padding:5px 12px;
+}
+.selected-product{
+ padding:12px;background:var(--light);border-radius:9px;
+ margin-bottom:14px;font-weight:bold;line-height:1.8;
+}
+#orderForm{display:flex;flex-direction:column;gap:13px}
+#orderForm .form-grid{
+ display:flex;flex-direction:column;gap:13px;width:100%;
+}
+#orderForm .form-grid>div{width:100%}
+#orderForm label{
+ display:block;font-size:14px;font-weight:bold;
+ margin-bottom:6px;
+}
+#orderForm input,#orderForm select,#orderForm textarea{
+ display:block;width:100%;min-height:47px;
+ padding:12px;border:1px solid #d7e2d9;
+ border-radius:9px;background:white;color:#222;
+ outline-color:var(--green);font-size:15px;
+}
+#orderForm textarea{min-height:85px;resize:vertical}
+#orderForm .secondary{width:100%;min-height:49px;font-size:16px}
+.result{
+ background:#edf9f0;border:1px solid #d5edda;
+ padding:12px;border-radius:9px;line-height:1.8;
+ overflow-wrap:anywhere;
+}
+.note{
+ padding:11px;background:#fff7e7;border:1px solid #f0e1ba;
+ border-radius:9px;font-size:12px;line-height:1.7;
+}
+.hidden{display:none!important}
+@media(min-width:650px){
+ main{padding:22px}
+ .hero{padding:38px}
+ .hero h2{font-size:38px}
+ .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+ .product-img{height:175px}
+ .brand h1{font-size:22px}
+ .modal{align-items:center}
+}
+</style>
+</head>
+
+<body>
+<header>
+ <div class="brand">
+  <div class="logo">স</div>
+  <div>
+   <h1>সত্যতা সপ</h1>
+   <small>আপনার বিশ্বস্ত অনলাইন শপ</small>
+  </div>
+ </div>
+ <button class="menu-btn" id="menuBtn" aria-label="মেনু">☰</button>
+</header>
+
+<nav id="mainNav">
+ <a href="#home">🏠 হোম</a>
+ <a href="#products">🛍️ সকল পণ্য</a>
+ <a href="#tracking">📦 অর্ডার ট্র্যাকিং</a>
+ <a href="#delivery">🚚 ডেলিভারি চার্জ</a>
+ <a href="#support">☎️ যোগাযোগ</a>
+</nav>
+
+<main>
+<section class="hero" id="home">
+ <span class="hero-tag">🌿 সত্যতা সপ-এ স্বাগতম</span>
+ <h2>আপনার পছন্দের পণ্য,<br>এখন হাতের মুঠোয়!</h2>
+ <p>পছন্দের পণ্য বেছে নিন। সহজে অর্ডার করুন আপনার ঘরে বসেই।</p>
+ <button class="primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+  এখনই কেনাকাটা করুন →
+ </button>
+</section>
+
+<div class="search">
+ <input id="search" type="search" placeholder="🔎 পণ্যের নাম লিখে খুঁজুন..." aria-label="পণ্য খুঁজুন">
+</div>
+
+<section class="section">
+ <div class="section-title">
+  <h2>📂 পণ্যের ক্যাটাগরি</h2>
+  <span class="muted">ক্যাটাগরি বেছে নিন</span>
+ </div>
+ <div class="categories" id="categories">
+  <button class="cat active" data-cat="সব">সব পণ্য</button>
+  <button class="cat" data-cat="ছেলেদের পোশাক">ছেলেদের পোশাক</button>
+  <button class="cat" data-cat="মেয়েদের পোশাক">মেয়েদের পোশাক</button>
+  <button class="cat" data-cat="বেবি কালেকশন">বেবি কালেকশন</button>
+  <button class="cat" data-cat="কাপড় ও কম্বো">কাপড় ও কম্বো</button>
+  <button class="cat" data-cat="গৃহস্থালি সামগ্রী">গৃহস্থালি সামগ্রী</button>
+  <button class="cat" data-cat="ব্যাগ কালেকশন">ব্যাগ কালেকশন</button>
+  <button class="cat" data-cat="জুতা কালেকশন">জুতা কালেকশন</button>
+  <button class="cat" data-cat="ইলেকট্রিক ও গ্যাজেট">ইলেকট্রিক ও গ্যাজেট</button>
+  <button class="cat" data-cat="জুয়েলারি ও এক্সেসরিজ">জুয়েলারি ও এক্সেসরিজ</button>
+  <button class="cat" data-cat="ঘড়ি ও ফ্যাশন">ঘড়ি ও ফ্যাশন</button>
+  <button class="cat" data-cat="বিউটি">বিউটি</button>
+  <button class="cat" data-cat="কিচেন">কিচেন</button>
+  <button class="cat" data-cat="হোম ডেকর">হোম ডেকর</button>
+  <button class="cat" data-cat="অফার">অফার</button>
+  <button class="cat" data-cat="অন্যান্য">অন্যান্য</button>
+ </div>
+</section>
+
+<section class="section" id="products">
+ <div class="section-title">
+  <h2>🛍️ আমাদের পণ্যসমূহ</h2>
+  <span class="muted" id="productCount"></span>
+ </div>
+ <div class="grid" id="productGrid"></div>
+ <p id="noProducts" class="muted hidden" style="text-align:center;padding:20px">
+  কোনো পণ্য পাওয়া যায়নি।
+ </p>
+</section>
+
+<section class="section" id="tracking">
+ <div class="section-title"><h2>📦 অর্ডার ট্র্যাকিং</h2></div>
+ <div class="panel">
+  <p class="muted">অর্ডার নম্বর লিখে আপনার অর্ডারের অবস্থা যাচাই করুন।</p>
+  <form id="trackingForm">
+   <label for="orderId">অর্ডার নম্বর</label>
+   <input id="orderId" required placeholder="যেমন: SAT123456">
+   <button class="secondary" type="submit" style="margin-top:10px;width:100%">অর্ডার খুঁজুন</button>
+  </form>
+  <div id="trackingResult" class="result hidden" style="margin-top:12px"></div>
+ </div>
+</section>
+
+<section class="section" id="delivery">
+ <div class="section-title"><h2>🚚 ডেলিভারি চার্জ</h2></div>
+ <div class="info-grid">
+  <div class="info-item"><b>ঢাকা সিটি</b>৳৭০</div>
+  <div class="info-item"><b>সাব-ঢাকা</b>৳১০০</div>
+  <div class="info-item"><b>ঢাকার বাইরে</b>৳১২০</div>
+  <div class="info-item"><b>অর্ডার সেবা</b>সহজ ও সুবিধাজনক</div>
+ </div>
+</section>
+
+<section class="section" id="support">
+ <div class="section-title"><h2>☎️ আমাদের সঙ্গে যোগাযোগ</h2></div>
+ <div class="support-grid">
+  <a class="support-link" href="https://wa.me/" target="_blank" rel="noopener">🟢 WhatsApp</a>
+  <a class="support-link" href="#" id="imoLink">💬 IMO</a>
+  <a class="support-link" href="https://t.me/" target="_blank" rel="noopener">✈️ Telegram</a>
+  <a class="support-link" href="https://facebook.com/" target="_blank" rel="noopener">📘 Facebook</a>
+ </div>
+ <p class="muted">সাপোর্ট লিংকগুলো পরে তোমার আসল অ্যাকাউন্টের লিংক দিয়ে পরিবর্তন করতে হবে।</p>
+</section>
+</main>
+
+<footer>
+ <strong>সত্যতা সপ</strong><br>
+ আপনার বিশ্বস্ত অনলাইন শপ<br>
+ © <span id="year"></span> সত্যতা সপ — সর্বস্বত্ব সংরক্ষিত
+</footer>
+
+<div class="modal" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h2 id="modalTitle">🛒 অর্ডার ফরম</h2>
+   <button class="close" id="closeModal" aria-label="বন্ধ করুন">×</button>
+  </div>
+
+  <div id="selectedProduct" class="selected-product"></div>
+
+  <form id="orderForm">
+   <div class="form-grid">
+
+    <div>
+     <label for="customerName">১. কাস্টমারের নাম *</label>
+     <input id="customerName" required maxlength="100" placeholder="আপনার সম্পূর্ণ নাম">
+    </div>
+
+    <div>
+     <label for="mobile">২. মোবাইল নম্বর *</label>
+     <input id="mobile" type="tel" required maxlength="18" pattern="[0-9০-৯+ -]{10,18}" placeholder="আপনার মোবাইল নম্বর">
+    </div>
+
+    <div>
+     <label for="altMobile">৩. অন্য মোবাইল নম্বর (ঐচ্ছিক)</label>
+     <input id="altMobile" type="tel" maxlength="18" placeholder="অন্য নম্বর থাকলে লিখুন">
+    </div>
+
+    <div>
+     <label for="village">৪. গ্রাম/এলাকা *</label>
+     <input id="village" required maxlength="100" placeholder="গ্রাম বা এলাকার নাম">
+    </div>
+
+    <div>
+     <label for="thana">৫. থানা/উপজেলা *</label>
+     <input id="thana" required maxlength="100" placeholder="থানা বা উপজেলার নাম">
+    </div>
+
+    <div>
+     <label for="district">৬. জেলা *</label>
+     <input id="district" required maxlength="100" placeholder="জেলার নাম">
+    </div>
+
+    <div>
+     <label for="receivePoint">৭. পার্সেল রিসিভ পয়েন্ট *</label>
+     <input id="receivePoint" required maxlength="150" placeholder="বাড়ি, দোকান বা কুরিয়ার পয়েন্ট">
+    </div>
+
+    <div>
+     <label for="size">৮. প্রোডাক্টের সাইজ</label>
+     <select id="size">
+      <option value="প্রযোজ্য নয়">প্রযোজ্য নয়</option>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="XXL">XXL</option>
+      <option value="অন্যান্য">অন্যান্য</option>
+     </select>
+    </div>
+
+    <div>
+     <label for="color">৯. প্রোডাক্টের কালার</label>
+     <input id="color" maxlength="50" placeholder="পছন্দের রং">
+    </div>
+
+    <div>
+     <label for="quantity">১০. প্রোডাক্টের সংখ্যা *</label>
+     <input id="quantity" type="number" min="1" max="20" value="1" required>
+    </div>
+
+    <div>
+     <label for="deliveryArea">১১. ডেলিভারি এলাকা *</label>
+     <select id="deliveryArea" required>
+      <option value="70">ঢাকা সিটি — ৳৭০</option>
+      <option value="100">সাব-ঢাকা — ৳১০০</option>
+      <option value="120">ঢাকার বাইরে — ৳১২০</option>
+     </select>
+    </div>
+
+    <div>
+     <label for="advance">১২. চার্জ অগ্রিম নিয়েছেন?</label>
+     <select id="advance">
+      <option value="না">না</option>
+      <option value="হ্যাঁ">হ্যাঁ</option>
+     </select>
+    </div>
+
+    <div>
+     <label for="comments">১৩. অতিরিক্ত নির্দেশনা (ঐচ্ছিক)</label>
+     <textarea id="comments" maxlength="500" placeholder="অতিরিক্ত কিছু জানাতে চাইলে লিখুন"></textarea>
+    </div>
+
+   </div>
+
+   <div id="priceSummary" class="result"></div>
+
+   <div class="note">
+    বর্তমানে এটি প্রাথমিক ডেমো। Firebase সংযোগ করার পরে অর্ডার ডেটাবেসে পাঠানো ও অ্যাডমিন প্যানেলে দেখানোর ব্যবস্থা চালু করতে হবে।
+   </div>
+
+   <button class="secondary" type="submit">অর্ডারের তথ্য যাচাই করুন</button>
+  </form>
+
+  <div id="orderResult" class="result hidden" style="margin-top:12px"></div>
+ </div>
+</div>
+
+<script>
+"use strict";
+
+/* নমুনা পণ্য। পরে Firebase থেকে পণ্য দেখানো হবে। */
+const products=[
+ {id:"p1",name:"কটন টি-শার্ট",category:"ছেলেদের পোশাক",price:500,stock:10,emoji:"👕",badge:"জনপ্রিয়"},
+ {id:"p2",name:"মেয়েদের সুন্দর পোশাক",category:"মেয়েদের পোশাক",price:850,stock:8,emoji:"👗",badge:"নতুন"},
+ {id:"p3",name:"বেবি ড্রেস",category:"বেবি কালেকশন",price:450,stock:12,emoji:"🧸",badge:""},
+ {id:"p4",name:"ফ্যামিলি কাপড় কম্বো",category:"কাপড় ও কম্বো",price:1200,stock:5,emoji:"🧵",badge:"অফার"},
+ {id:"p5",name:"হোম স্টোরেজ বক্স",category:"গৃহস্থালি সামগ্রী",price:350,stock:15,emoji:"🧺",badge:""},
+ {id:"p6",name:"ফ্যাশন ব্যাগ",category:"ব্যাগ কালেকশন",price:650,stock:7,emoji:"👜",badge:"নতুন"},
+ {id:"p7",name:"ক্যাজুয়াল জুতা",category:"জুতা কালেকশন",price:950,stock:6,emoji:"👟",badge:""},
+ {id:"p8",name:"স্মার্ট গ্যাজেট",category:"ইলেকট্রিক ও গ্যাজেট",price:750,stock:9,emoji:"🎧",badge:"জনপ্রিয়"},
+ {id:"p9",name:"ফ্যাশন জুয়েলারি",category:"জুয়েলারি ও এক্সেসরিজ",price:300,stock:20,emoji:"💍",badge:""},
+ {id:"p10",name:"ফ্যাশন ঘড়ি",category:"ঘড়ি ও ফ্যাশন",price:550,stock:11,emoji:"⌚",badge:""},
+ {id:"p11",name:"বিউটি কেয়ার সেট",category:"বিউটি",price:600,stock:5,emoji:"🧴",badge:""},
+ {id:"p12",name:"কিচেন সামগ্রী",category:"কিচেন",price:400,stock:14,emoji:"🍳",badge:""}
+];
+
+let activeCategory="সব";
+let selectedProduct=null;
+
+const $=id=>document.getElementById(id);
+const grid=$("productGrid");
+const modal=$("orderModal");
+
+function money(n){
+ return "৳"+Number(n).toLocaleString("bn-BD");
+}
+
+function renderProducts(){
+ const query=$("search").value.trim().toLocaleLowerCase();
+ const list=products.filter(p=>
+  (activeCategory==="সব"||p.category===activeCategory)&&
+  (p.name.toLocaleLowerCase().includes(query)||
+   p.category.toLocaleLowerCase().includes(query))
+ );
+
+ grid.replaceChildren();
+ $("productCount").textContent=list.length.toLocaleString("bn-BD")+"টি পণ্য";
+ $("noProducts").classList.toggle("hidden",list.length>0);
+
+ list.forEach(p=>{
+  const card=document.createElement("article");
+  card.className="product";
+
+  const img=document.createElement("div");
+  img.className="product-img";
+  img.textContent=p.emoji;
+
+  const info=document.createElement("div");
+  info.className="product-info";
+
+  if(p.badge){
+   const badge=document.createElement("span");
+   badge.className="badge";
+   badge.textContent=p.badge;
+   info.appendChild(badge);
+  }
+
+  const title=document.createElement("h3");
+  title.textContent=p.name;
+
+  const cat=document.createElement("div");
+  cat.className="muted";
+  cat.textContent=p.category;
+
+  const price=document.createElement("div");
+  price.className="price";
+  price.textContent=money(p.price);
+
+  const stock=document.createElement("div");
+  stock.className="stock";
+  stock.textContent=p.stock>0
+   ?"স্টকে আছে: "+p.stock.toLocaleString("bn-BD")+"টি"
+   :"স্টক শেষ";
+
+  const btn=document.createElement("button");
+  btn.className="secondary";
+  btn.textContent="অর্ডার করুন";
+  btn.disabled=p.stock<1;
+  btn.addEventListener("click",()=>openOrder(p));
+
+  info.append(title,cat,price,stock,btn);
+  card.append(img,info);
+  grid.appendChild(card);
+ });
+}
+
+function openOrder(p){
+ selectedProduct=p;
+ $("selectedProduct").textContent=p.name+" — "+money(p.price);
+ $("orderForm").reset();
+ $("quantity").value="1";
+ $("orderResult").classList.add("hidden");
+ updatePrice();
+ modal.classList.add("show");
+ document.body.style.overflow="hidden";
+}
+
+function closeOrder(){
+ modal.classList.remove("show");
+ document.body.style.overflow="";
+}
+
+function updatePrice(){
+ if(!selectedProduct)return;
+ const qty=Math.max(1,Math.min(20,Number($("quantity").value)||1));
+ const delivery=Number($("deliveryArea").value)||70;
+ $("priceSummary").textContent=
+  "পণ্যের দাম: "+money(selectedProduct.price*qty)+
+  " | ডেলিভারি চার্জ: "+money(delivery)+
+  " | সর্বমোট: "+money(selectedProduct.price*qty+delivery);
+}
+
+$("menuBtn").addEventListener("click",()=>{
+ $("mainNav").classList.toggle("open");
+});
+
+document.querySelectorAll("#mainNav a").forEach(a=>{
+ a.addEventListener("click",()=>$("mainNav").classList.remove("open"));
+});
+
+document.querySelectorAll(".cat").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+  document.querySelectorAll(".cat").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  activeCategory=btn.dataset.cat;
+  renderProducts();
+ });
+});
+
+$("search").addEventListener("input",renderProducts);
+$("quantity").addEventListener("input",updatePrice);
+$("deliveryArea").addEventListener("change",updatePrice);
+$("closeModal").addEventListener("click",closeOrder);
+
+modal.addEventListener("click",e=>{
+ if(e.target===modal)closeOrder();
+});
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape")closeOrder();
+});
+
+$("orderForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ if(!selectedProduct)return;
+
+ const qty=Number($("quantity").value);
+ if(!Number.isInteger(qty)||qty<1||qty>20){
+  alert("পরিমাণ ১ থেকে ২০-এর মধ্যে দিন।");
+  return;
+ }
+
+ if(qty>selectedProduct.stock){
+  alert("দুঃখিত, পর্যাপ্ত পণ্য স্টকে নেই।");
+  return;
+ }
+
+ const total=selectedProduct.price*qty+Number($("deliveryArea").value);
+ $("orderResult").classList.remove("hidden");
+ $("orderResult").textContent=
+  "ফরমের তথ্য যাচাই হয়েছে। মোট মূল্য "+money(total)+
+  "। এটি ডেমো মাত্র; অর্ডার এখনো ডেটাবেসে পাঠানো হয়নি।";
+});
+
+$("trackingForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ $("trackingResult").classList.remove("hidden");
+ $("trackingResult").textContent=
+  "এখনো বাস্তব অর্ডার ট্র্যাকিং চালু হয়নি। Firebase ও নিরাপদ অর্ডার যাচাই ব্যবস্থা যুক্ত করার পরে এটি কাজ করবে।";
+});
+
+$("imoLink").addEventListener("click",e=>{
+ e.preventDefault();
+ alert("IMO-এর আসল লিংক বা নম্বর পরে যোগ করতে হবে।");
+});
+
+$("year").textContent=new Date().getFullYear();
+renderProducts();
+</script>
+</body>
+</html>
