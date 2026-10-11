@@ -585,6 +585,354 @@ $("imoLink").addEventListener("click",e=>{
 
 $("year").textContent=new Date().getFullYear();
 renderProducts();
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import {
+  getFirestore, collection, doc, getDoc, addDoc,
+  onSnapshot, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDHHTt4EFkH_H5xc2q2rGTC2piSCjOJuKM",
+  authDomain: "satata-shop.firebaseapp.com",
+  projectId: "satata-shop",
+  storageBucket: "satata-shop.firebasestorage.app",
+  messagingSenderId: "964264833764",
+  appId: "1:964264833764:web:7c77ae2f3cb8c782abf2f1",
+  measurementId: "G-1H2H45YG3D"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const $ = id => document.getElementById(id);
+
+let products = [];
+let selectedProduct = null;
+let activeCategory = "সব";
+
+function money(n) {
+  return "৳" + Number(n || 0).toLocaleString("bn-BD");
+}
+
+function safeText(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  })[c]);
+}
+
+/* Firebase থেকে পণ্য নিয়ে দেখানো */
+function renderProducts() {
+  const query = $("search").value.trim().toLowerCase();
+
+  const list = products.filter(p => {
+    const category = p.category || "অন্যান্য";
+    const name = p.name || p.title || "পণ্য";
+    return (activeCategory === "সব" || category === activeCategory) &&
+      (name.toLowerCase().includes(query) ||
+       category.toLowerCase().includes(query));
+  });
+
+  const grid = $("productGrid");
+  grid.replaceChildren();
+
+  $("productCount").textContent =
+    list.length.toLocaleString("bn-BD") + "টি পণ্য";
+  $("noProducts").classList.toggle("hidden", list.length > 0);
+
+  list.forEach(p => {
+    const card = document.createElement("article");
+    card.className = "product";
+
+    const imageBox = document.createElement("div");
+    imageBox.className = "product-img";
+
+    const imageUrl = Array.isArray(p.images) && p.images.length
+      ? p.images[0]
+      : (p.image || p.imageUrl || "");
+
+    if (imageUrl) {
+      const img = document.createElement("img");
+      img.src = imageUrl;
+      img.alt = p.name || "পণ্য";
+      img.loading = "lazy";
+      img.style.cssText =
+        "width:100%;height:100%;object-fit:cover";
+      imageBox.appendChild(img);
+    } else {
+      imageBox.textContent = "🛍️";
+    }
+
+    const info = document.createElement("div");
+    info.className = "product-info";
+
+    if (p.badge) {
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = p.badge;
+      info.appendChild(badge);
+    }
+
+    const title = document.createElement("h3");
+    title.textContent = p.name || p.title || "নাম দেওয়া নেই";
+
+    const category = document.createElement("div");
+    category.className = "muted";
+    category.textContent = p.category || "অন্যান্য";
+
+    const price = document.createElement("div");
+    price.className = "price";
+    price.textContent = money(p.price);
+
+    const stock = document.createElement("div");
+    stock.className = "stock";
+    stock.textContent = Number(p.stock || 0) > 0
+      ? "স্টকে আছে: " + Number(p.stock).toLocaleString("bn-BD") + "টি"
+      : "স্টক শেষ";
+
+    const button = document.createElement("button");
+    button.className = "secondary";
+    button.textContent = "অর্ডার করুন";
+    button.disabled = Number(p.stock || 0) < 1;
+    button.addEventListener("click", () => openOrder(p));
+
+    info.append(title, category, price, stock, button);
+    card.append(imageBox, info);
+    grid.appendChild(card);
+  });
+}
+
+/* অ্যাডমিন প্যানেলের products collection পর্যবেক্ষণ */
+onSnapshot(collection(db, "products"), snapshot => {
+  products = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderProducts();
+}, error => {
+  console.error(error);
+  alert("পণ্য লোড হয়নি। Firebase Rules ও সংযোগ পরীক্ষা করুন।");
+});
+
+/* অ্যাডমিন প্যানেলের logo/banner/support settings */
+onSnapshot(doc(db, "settings", "site"), snapshot => {
+  if (!snapshot.exists()) return;
+  const s = snapshot.data();
+
+  document.title = (s.siteName || "সত্যতা সপ") + " | অনলাইন শপ";
+
+  const heading = document.querySelector(".brand h1");
+  if (heading && s.siteName) heading.textContent = s.siteName;
+
+  const logo = document.querySelector(".logo");
+  if (logo && s.logoUrl) {
+    logo.textContent = "";
+    const img = document.createElement("img");
+    img.src = s.logoUrl;
+    img.alt = s.siteName || "লোগো";
+    img.style.cssText =
+      "width:100%;height:100%;object-fit:contain;border-radius:12px";
+    logo.appendChild(img);
+    logo.style.background = "white";
+  }
+
+  const hero = document.querySelector(".hero");
+  if (hero && s.bannerUrl) {
+    hero.style.backgroundImage =
+      "linear-gradient(#064d30a8,#12a35e99),url('" +
+      s.bannerUrl.replace(/['()]/g, "") + "')";
+    hero.style.backgroundSize = "cover";
+    hero.style.backgroundPosition = "center";
+  }
+
+  const heroHeading = document.querySelector(".hero h2");
+  if (heroHeading && s.promoText) heroHeading.textContent = s.promoText;
+
+  const links = {
+    whatsapp: s.whatsappLink ||
+      (s.whatsappNumber
+        ? "https://wa.me/" + s.whatsappNumber.replace(/\D/g, "")
+        : ""),
+    telegram: s.telegramLink || "",
+    facebook: s.facebookLink || "",
+    imo: s.imoNumber || ""
+  };
+
+  const supportLinks = document.querySelectorAll(".support-link");
+  const destinations = [
+    links.whatsapp, links.imo, links.telegram, links.facebook
+  ];
+
+  supportLinks.forEach((a, index) => {
+    const url = destinations[index];
+    if (url && /^https?:\/\//i.test(url)) {
+      a.href = url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+    } else {
+      a.href = "#support";
+    }
+  });
+}, error => console.error("Settings:", error));
+
+/* ক্যাটাগরি ও সার্চ */
+$("search").addEventListener("input", renderProducts);
+
+document.querySelectorAll(".cat").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".cat").forEach(b =>
+      b.classList.remove("active")
+    );
+    button.classList.add("active");
+    activeCategory = button.dataset.cat;
+    renderProducts();
+  });
+});
+
+$("menuBtn").addEventListener("click", () => {
+  $("mainNav").classList.toggle("open");
+});
+
+document.querySelectorAll("#mainNav a").forEach(a => {
+  a.addEventListener("click", () =>
+    $("mainNav").classList.remove("open")
+  );
+});
+
+/* অর্ডার ফরম */
+function openOrder(product) {
+  selectedProduct = product;
+  $("selectedProduct").textContent =
+    (product.name || product.title || "পণ্য") +
+    " — " + money(product.price);
+
+  $("orderForm").reset();
+  $("quantity").value = "1";
+  $("orderResult").classList.add("hidden");
+  updatePrice();
+
+  $("orderModal").classList.add("show");
+  document.body.style.overflow = "hidden";
+}
+
+function closeOrder() {
+  $("orderModal").classList.remove("show");
+  document.body.style.overflow = "";
+}
+
+$("closeModal").addEventListener("click", closeOrder);
+
+$("orderModal").addEventListener("click", e => {
+  if (e.target === $("orderModal")) closeOrder();
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeOrder();
+});
+
+function updatePrice() {
+  if (!selectedProduct) return;
+
+  const quantity = Math.max(
+    1, Math.min(20, Number($("quantity").value) || 1)
+  );
+  const delivery = Number($("deliveryArea").value) || 70;
+  const total = Number(selectedProduct.price) * quantity + delivery;
+
+  $("priceSummary").textContent =
+    "পণ্যের দাম: " + money(Number(selectedProduct.price) * quantity) +
+    " | ডেলিভারি চার্জ: " + money(delivery) +
+    " | সর্বমোট: " + money(total);
+}
+
+$("quantity").addEventListener("input", updatePrice);
+$("deliveryArea").addEventListener("change", updatePrice);
+
+/* অর্ডার Firestore-এ সংরক্ষণ */
+$("orderForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!selectedProduct) return;
+
+  const button = $("orderForm").querySelector('button[type="submit"]');
+  if (button.disabled) return;
+
+  const quantity = Number($("quantity").value);
+  const stock = Number(selectedProduct.stock || 0);
+
+  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) {
+    alert("পরিমাণ ১ থেকে ২০-এর মধ্যে দিন।");
+    return;
+  }
+
+  if (quantity > stock) {
+    alert("পর্যাপ্ত পণ্য স্টকে নেই।");
+    return;
+  }
+
+  const mobile = $("mobile").value.trim();
+  if (!/^[0-9০-৯+ -]{10,18}$/.test(mobile)) {
+    alert("সঠিক মোবাইল নম্বর লিখুন।");
+    return;
+  }
+
+  const deliveryCharge = Number($("deliveryArea").value) || 70;
+  const totalPrice = Number(selectedProduct.price) * quantity +
+    deliveryCharge;
+
+  const order = {
+    customerName: $("customerName").value.trim(),
+    mobile,
+    altMobile: $("altMobile").value.trim(),
+    village: $("village").value.trim(),
+    thana: $("thana").value.trim(),
+    district: $("district").value.trim(),
+    receivePoint: $("receivePoint").value.trim(),
+    size: $("size").value,
+    color: $("color").value.trim(),
+    quantity,
+    deliveryCharge,
+    advance: $("advance").value,
+    comments: $("comments").value.trim(),
+    productId: selectedProduct.id,
+    productName: selectedProduct.name || selectedProduct.title || "পণ্য",
+    productPrice: Number(selectedProduct.price),
+    totalPrice,
+    status: "pending",
+    createdAt: serverTimestamp()
+  };
+
+  button.disabled = true;
+  button.textContent = "অর্ডার পাঠানো হচ্ছে...";
+
+  try {
+    const saved = await addDoc(collection(db, "orders"), order);
+
+    $("orderResult").classList.remove("hidden");
+    $("orderResult").textContent =
+      "আপনার অর্ডার জমা হয়েছে! অর্ডার নম্বর: " + saved.id +
+      "। মোট মূল্য: " + money(totalPrice) +
+      "। অর্ডার নম্বরটি সংরক্ষণ করুন।";
+
+    $("orderId").value = saved.id;
+    $("orderForm").reset();
+    updatePrice();
+  } catch (error) {
+    console.error(error);
+    alert("অর্ডার জমা হয়নি। ইন্টারনেট ও Firebase Rules পরীক্ষা করুন।");
+  } finally {
+    button.disabled = false;
+    button.textContent = "অর্ডারের তথ্য যাচাই করুন";
+  }
+});
+
+/* নিরাপদ সার্ভার-সাইড যাচাই যুক্ত না হওয়া পর্যন্ত
+   পাবলিক অর্ডার ট্র্যাকিং চালু করা হয়নি। */
+$("trackingForm").addEventListener("submit", e => {
+  e.preventDefault();
+  $("trackingResult").classList.remove("hidden");
+  $("trackingResult").textContent =
+    "আপনার অর্ডার নম্বর: " + $("orderId").value.trim() +
+    "। অর্ডারের বর্তমান অবস্থা জানতে সাপোর্টে যোগাযোগ করুন।";
+});
+
+$("year").textContent = new Date().getFullYear();
 </script>
-</body>
-</html>
+ 
