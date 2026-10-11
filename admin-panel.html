@@ -1,143 +1,163 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel | সততা সপ</title>
-<style>
-:root{--bg:#f4f7fb;--card:#fff;--ink:#172033;--muted:#667085;--brand:#116b4d;--brand2:#0a4d38;--line:#e5eaf0;--danger:#b42318;--warn:#b54708;--blue:#175cd3}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--ink)}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:10px 14px;font-weight:700}.primary{background:var(--brand);color:#fff}.primary:hover{background:var(--brand2)}.soft{background:#e8f5ef;color:var(--brand)}.danger{background:#fee4e2;color:var(--danger)}.mutedbtn{background:#eef2f6;color:#344054}.hidden{display:none!important}
-.login-wrap{min-height:100vh;display:grid;place-items:center;padding:20px}.login-card{width:min(430px,100%);background:white;padding:28px;border-radius:20px;box-shadow:0 12px 45px #14213d12}.brandmark{width:56px;height:56px;border-radius:16px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:900;font-size:24px;margin-bottom:12px}.field{display:flex;flex-direction:column;gap:6px;margin:12px 0}.field label{font-size:13px;font-weight:750;color:#344054}.field input,.field select,.field textarea{width:100%;border:1px solid #d0d5dd;border-radius:10px;padding:11px 12px;background:#fff;color:var(--ink);outline-color:var(--brand)}.field textarea{min-height:78px;resize:vertical}.hint{font-size:12px;color:var(--muted);line-height:1.6}.error{color:var(--danger);font-size:13px;white-space:pre-wrap}.shell{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:245px;background:#103e30;color:#fff;padding:22px 14px;display:flex;flex-direction:column;z-index:10}.logo{display:flex;align-items:center;gap:10px;padding:0 8px 24px}.logo-icon{width:42px;height:42px;border-radius:13px;background:#fff;color:var(--brand);display:grid;place-items:center;font-weight:900}.logo strong{display:block}.logo small{opacity:.7}.nav{display:grid;gap:6px}.nav button{background:transparent;color:#d5e9e0;text-align:left;display:flex;gap:12px;align-items:center;padding:12px}.nav button.active,.nav button:hover{background:#ffffff1c;color:#fff}.side-bottom{margin-top:auto;padding:10px;color:#d5e9e0;font-size:12px}.main{margin-left:245px;padding:24px;max-width:1600px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px}.topbar h1{font-size:25px;margin:0}.topbar p{margin:5px 0 0;color:var(--muted);font-size:13px}.top-actions{display:flex;gap:8px;align-items:center}.avatar{background:#d9f3e7;color:var(--brand);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 3px 12px #10182806}.stat-label{font-size:13px;color:var(--muted)}.stat-value{font-size:25px;font-weight:850;margin-top:8px}.stat-foot{font-size:12px;color:var(--muted);margin-top:4px}.panel{margin-bottom:18px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:15px}.panel-head h2{font-size:17px;margin:0}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.toolbar input,.toolbar select{border:1px solid #d0d5dd;border-radius:9px;padding:9px 10px;min-width:150px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:700px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}th{color:var(--muted);font-weight:750;background:#fafbfc}td strong{font-size:13px}.product-cell{display:flex;align-items:center;gap:10px;min-width:190px}.thumb{width:48px;height:48px;object-fit:cover;border-radius:9px;background:#eef2f6;flex-shrink:0}.pill{display:inline-flex;border-radius:99px;padding:5px 9px;font-size:11px;font-weight:800;background:#eef2f6;color:#344054}.pill.pending{background:#fff0c2;color:#854a0e}.pill.approved,.pill.delivered{background:#d1fadf;color:#05603a}.pill.cancelled{background:#fee4e2;color:#b42318}.pill.shipped{background:#dbeafe;color:#1d4ed8}.actions{display:flex;gap:6px;flex-wrap:wrap}.smallbtn{padding:7px 9px;font-size:12px}.empty{text-align:center;color:var(--muted);padding:30px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}.span2{grid-column:1/-1}.modal-backdrop{position:fixed;inset:0;background:#10182880;z-index:30;display:grid;place-items:center;padding:16px}.modal{background:#fff;border-radius:18px;padding:22px;width:min(680px,100%);max-height:92vh;overflow:auto;box-shadow:0 25px 80px #0003}.modal h2{margin:0 0 12px;font-size:20px}.modal-foot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.toast{position:fixed;bottom:20px;right:20px;z-index:60;background:#172033;color:white;padding:12px 16px;border-radius:12px;max-width:min(420px,90vw);box-shadow:0 10px 30px #0002}.notice{border:1px solid #fedf89;background:#fffaeb;color:#854a0e;padding:12px 14px;border-radius:12px;font-size:13px;line-height:1.6;margin-bottom:16px}.mobile-menu{display:none}.image-preview{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.image-preview img{width:64px;height:64px;object-fit:cover;border-radius:9px;border:1px solid var(--line)}
-@media(max-width:1000px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.sidebar{width:210px}.main{margin-left:210px;padding:18px}}
-@media(max-width:700px){.sidebar{transform:translateX(-100%);transition:transform .2s;width:260px;box-shadow:10px 0 30px #0001}.sidebar.open{transform:translateX(0)}.main{margin-left:0;padding:15px}.mobile-menu{display:inline-flex}.topbar h1{font-size:21px}.topbar{align-items:flex-start}.top-actions .user-email{display:none}.stats{gap:9px}.stat{padding:13px}.stat-value{font-size:21px}.stat-label{font-size:12px}.form-grid{grid-template-columns:1fr}.span2{grid-column:auto}.panel{padding:13px}.panel-head{align-items:flex-start;flex-direction:column}.toolbar input,.toolbar select{min-width:120px;flex:1}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login | সততা সপ</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #e8fff1, #e8edff);
+    }
+    .card {
+      width: 100%;
+      max-width: 390px;
+      padding: 28px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 10px 35px #00000015;
+    }
+    h2 { text-align: center; color: #087443; }
+    p { text-align: center; color: #666; }
+    input, button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 12px;
+      border-radius: 9px;
+      font-size: 15px;
+    }
+    input { border: 1px solid #ccc; }
+    button {
+      border: 0;
+      background: #087443;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #message { font-size: 14px; overflow-wrap: anywhere; }
+    #dashboard { display: none; }
+  </style>
 </head>
 <body>
-<div id="loginScreen" class="login-wrap">
-  <div class="login-card">
-    <div class="brandmark">স</div>
-    <h1 style="margin:0 0 4px;font-size:24px">সততা সপ</h1>
-    <p style="margin:0 0 20px;color:#667085">Admin Panel-এ লগইন করুন</p>
-    <form id="loginForm">
-      <div class="field"><label for="loginEmail">অ্যাডমিন ইমেইল</label><input id="loginEmail" type="email" autocomplete="username" required placeholder="admin@example.com"></div>
-      <div class="field"><label for="loginPassword">পাসওয়ার্ড</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Firebase Auth পাসওয়ার্ড"></div>
-      <button class="primary" style="width:100%;margin-top:8px" type="submit">লগইন</button>
-      <p id="loginError" class="error"></p>
-    </form>
-    <p class="hint">এই ফাইলে নিচের CONFIG অংশে আপনার অনুমোদিত অ্যাডমিন ইমেইল বসাতে হবে। Firebase Authentication-এ আগে ওই ইমেইল তৈরি থাকতে হবে।</p>
-  </div>
-</div>
-<div id="app" class="shell hidden">
-  <aside id="sidebar" class="sidebar">
-    <div class="logo"><div class="logo-icon">স</div><div><strong>সততা সপ</strong><small>ADMIN CONTROL</small></div></div>
-    <nav class="nav">
-      <button class="active" data-view="dashboard">▦ <span>ড্যাশবোর্ড</span></button>
-      <button data-view="products">▣ <span>পণ্য ম্যানেজমেন্ট</span></button>
-      <button data-view="orders">🛍 <span>অর্ডার ম্যানেজমেন্ট</span></button>
-      <button data-view="customers">♙ <span>কাস্টমার</span></button>
-      <button data-view="reports">▤ <span>বিক্রির রিপোর্ট</span></button>
-    </nav>
-    <div class="side-bottom">সততা সপ • Admin Panel<br><span id="sideEmail"></span></div>
-  </aside>
-  <main class="main">
-    <header class="topbar">
-      <div style="display:flex;gap:10px;align-items:flex-start"><button class="mutedbtn mobile-menu" id="menuBtn">☰</button><div><h1 id="pageTitle">ড্যাশবোর্ড</h1><p id="pageSubtitle">আপনার দোকানের সারসংক্ষেপ</p></div></div>
-      <div class="top-actions"><span class="user-email" id="topEmail" style="font-size:12px;color:#667085"></span><div class="avatar">স</div><button class="mutedbtn" id="logoutBtn">লগআউট</button></div>
-    </header>
-    <div class="notice">নিরাপত্তা: নিচের <b>ADMIN_EMAILS</b> তালিকায় অনুমোদিত ইমেইল না থাকলে এই প্যানেল খুলবে না। তবে প্রকৃত নিরাপত্তার জন্য Firestore ও Storage Rules-এও admin অনুমতি বাধ্যতামূলক করুন—শুধু HTML-এর চেক যথেষ্ট নয়।</div>
-    <section id="dashboardView">
-      <div class="stats">
-        <div class="stat"><div class="stat-label">মোট পণ্য</div><div class="stat-value" id="statProducts">০</div><div class="stat-foot">Products collection</div></div>
-        <div class="stat"><div class="stat-label">মোট অর্ডার</div><div class="stat-value" id="statOrders">০</div><div class="stat-foot">Orders collection</div></div>
-        <div class="stat"><div class="stat-label">মোট বিক্রি</div><div class="stat-value" id="statSales">৳০</div><div class="stat-foot">Delivered/Approved orders</div></div>
-        <div class="stat"><div class="stat-label">পেন্ডিং অর্ডার</div><div class="stat-value" id="statPending">০</div><div class="stat-foot">অ্যাকশন প্রয়োজন</div></div>
-      </div>
-      <div class="panel"><div class="panel-head"><h2>সাম্প্রতিক অর্ডার</h2><button class="soft smallbtn" data-goto="orders">সব অর্ডার দেখুন</button></div><div class="table-wrap"><table><thead><tr><th>অর্ডার</th><th>কাস্টমার</th><th>তারিখ</th><th>মোট</th><th>স্ট্যাটাস</th></tr></thead><tbody id="recentOrders"></tbody></table></div></div>
-      <div class="panel"><div class="panel-head"><h2>সাম্প্রতিক পণ্য</h2><button class="soft smallbtn" data-goto="products">পণ্য ম্যানেজ করুন</button></div><div class="table-wrap"><table><thead><tr><th>পণ্য</th><th>মূল্য</th><th>স্টক</th><th>ছবি</th></tr></thead><tbody id="recentProducts"></tbody></table></div></div>
-    </section>
-    <section id="productsView" class="hidden"><div class="panel"><div class="panel-head"><h2>পণ্যের তালিকা</h2><div class="toolbar"><input id="productSearch" placeholder="পণ্য খুঁজুন..."><button class="primary" id="addProductBtn">＋ পণ্য যোগ করুন</button></div></div><div class="table-wrap"><table><thead><tr><th>পণ্য</th><th>ক্যাটাগরি</th><th>মূল্য</th><th>স্টক</th><th>ছবি</th><th>অ্যাকশন</th></tr></thead><tbody id="productsTable"></tbody></table></div></div></section>
-    <section id="ordersView" class="hidden"><div class="panel"><div class="panel-head"><h2>সব অর্ডার</h2><div class="toolbar"><input id="orderSearch" placeholder="নাম/ফোন/আইডি"><select id="orderFilter"><option value="">সব স্ট্যাটাস</option><option>Pending</option><option>Approved</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option></select></div></div><div class="table-wrap"><table><thead><tr><th>অর্ডার আইডি</th><th>কাস্টমার</th><th>পণ্য</th><th>মোট</th><th>তারিখ</th><th>স্ট্যাটাস</th><th>পরিবর্তন</th></tr></thead><tbody id="ordersTable"></tbody></table></div></div></section>
-    <section id="customersView" class="hidden"><div class="panel"><div class="panel-head"><h2>কাস্টমার তালিকা</h2><div class="toolbar"><input id="customerSearch" placeholder="নাম বা ফোন খুঁজুন"></div></div><div class="table-wrap"><table><thead><tr><th>নাম</th><th>মোবাইল</th><th>ইমেইল</th><th>ঠিকানা</th><th>অর্ডার</th><th>মোট কেনাকাটা</th></tr></thead><tbody id="customersTable"></tbody></table></div><p class="hint">এই তালিকা Orders collection-এর কাস্টমার তথ্য থেকে তৈরি হয়।</p></div></section>
-    <section id="reportsView" class="hidden"><div class="stats"><div class="stat"><div class="stat-label">নিশ্চিত বিক্রি</div><div class="stat-value" id="reportSales">৳০</div></div><div class="stat"><div class="stat-label">আনুমানিক পণ্যমূল্য</div><div class="stat-value" id="reportCost">৳০</div></div><div class="stat"><div class="stat-label">আনুমানিক লাভ</div><div class="stat-value" id="reportProfit">৳০</div></div><div class="stat"><div class="stat-label">সম্পন্ন অর্ডার</div><div class="stat-value" id="reportDelivered">০</div></div></div><div class="panel"><h2 style="margin-top:0">রিপোর্ট সম্পর্কে</h2><p class="hint">বিক্রি গণনায় Delivered ও Approved অর্ডারের মোট ধরা হয়। লাভ হিসাব করতে পণ্যের basePrice/মূল দাম এবং অর্ডারের পণ্যে সংরক্ষিত cost/basePrice দরকার। পুরোনো অর্ডারে এই তথ্য না থাকলে লাভের রিপোর্ট অসম্পূর্ণ হতে পারে।</p><button class="primary" id="exportOrders">অর্ডার CSV ডাউনলোড</button></div></section>
-  </main>
-</div>
-<div id="modalRoot" class="hidden"></div><div id="toast" class="toast hidden"></div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-storage.js";
+  <div class="card">
+    <section id="login">
+      <h2>সততা সপ</h2>
+      <p>Admin Panel Login</p>
 
-/* ===== CONFIG: আপনার Firebase config এবং অনুমোদিত admin email বসান ===== */
-const firebaseConfig = {
-  apiKey: "AIzaSyDHHTt4EFkH_H5xc2q2rGTC2piSCjOJuKM",
-  authDomain: "satata-shop.firebaseapp.com",
-  projectId: "satata-shop",
-  storageBucket: "satata-shop.firebasestorage.app",
-  messagingSenderId: "964264833764",
-  appId: "1:964264833764:web:7c77ae2f3cb8c782abf2f1",
-  measurementId: "G-1H2H45YG3D"
-};
-// IMPORTANT: এখানে আপনার Firebase Authentication-এ তৈরি করা অ্যাডমিন ইমেইল লিখুন।
-const ADMIN_EMAILS = ["YOUR_ADMIN_EMAIL@example.com"].map(x=>x.toLowerCase());
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app), db = getFirestore(app), storage = getStorage(app);
-let products=[], orders=[], currentUser=null, selectedFiles=[];
-const $ = id => document.getElementById(id);
-const bn = n => Number(n||0).toLocaleString("bn-BD");
-const money = n => "৳"+bn(n);
-const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function toast(msg){$("toast").textContent=msg;$("toast").classList.remove("hidden");setTimeout(()=>$("toast").classList.add("hidden"),3500)}
-function dateText(v){if(!v)return "—";try{let d=v.toDate?v.toDate():new Date(v);return d.toLocaleDateString("bn-BD",{year:"numeric",month:"short",day:"numeric"})}catch{return "—"}}
-function totalOf(o){return Number(o.totalPrice??o.total??o.grandTotal??o.amount??0)}
-function statusOf(o){return String(o.status??o.orderStatus??"Pending")}
-function nameOf(o){return o.customerName??o.name??o.customer?.name??"নাম নেই"}
-function phoneOf(o){return o.customerPhone??o.mobile??o.phone??o.customer?.phone??""}
-function productName(p){return p.name??p.productName??"নামহীন পণ্য"}
-function priceOf(p){return Number(p.sellingPrice??p.price??p.salePrice??0)}
-function stockOf(p){return Number(p.stock??p.quantity??0)}
-function imgOf(p){return p.images?.[0]??p.imageUrl??p.image??""}
-function pill(s){let cls=["Approved","Delivered","Shipped","Cancelled"].includes(s)?s.toLowerCase():"pending";return `<span class="pill ${cls}">${esc(s)}</span>`}
-function requireConfiguredAdmin(user){return ADMIN_EMAILS[0]!=="your_admin_email@example.com" && ADMIN_EMAILS.includes((user.email||"").toLowerCase())}
-$("loginForm").addEventListener("submit",async e=>{e.preventDefault();$("loginError").textContent="";try{await signInWithEmailAndPassword(auth,$("loginEmail").value.trim(),$("loginPassword").value)}catch(err){$("loginError").textContent="লগইন হয়নি: "+(err.code||err.message)}});
-onAuthStateChanged(auth,async user=>{currentUser=user;if(!user){$("app").classList.add("hidden");$("loginScreen").classList.remove("hidden");return}
- if(!requireConfiguredAdmin(user)){await signOut(auth);$("loginError").textContent="এই ইমেইল Admin Panel-এর অনুমোদিত তালিকায় নেই। HTML ফাইলে ADMIN_EMAILS ঠিক করুন।";return}
- $("loginScreen").classList.add("hidden");$("app").classList.remove("hidden");$("sideEmail").textContent=user.email;$("topEmail").textContent=user.email;await loadData()});
-$("logoutBtn").onclick=()=>signOut(auth);
-$("menuBtn").onclick=()=>$("sidebar").classList.toggle("open");
-document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
-document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.goto)));
-function showView(v){["dashboard","products","orders","customers","reports"].forEach(x=>$(x+"View").classList.toggle("hidden",x!==v));document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===v));const titles={dashboard:["ড্যাশবোর্ড","আপনার দোকানের সারসংক্ষেপ"],products:["পণ্য ম্যানেজমেন্ট","পণ্য যোগ করুন, সম্পাদনা করুন বা মুছুন"],orders:["অর্ডার ম্যানেজমেন্ট","কাস্টমার অর্ডার ও ডেলিভারি স্ট্যাটাস"],customers:["কাস্টমার","অর্ডার থেকে সংগৃহীত কাস্টমার তালিকা"],reports:["বিক্রির রিপোর্ট","বিক্রি ও আনুমানিক লাভ"]};$("pageTitle").textContent=titles[v][0];$("pageSubtitle").textContent=titles[v][1];$("sidebar").classList.remove("open")}
-async function loadData(){try{const [ps,os]=await Promise.all([getDocs(collection(db,"products")),getDocs(collection(db,"orders"))]);products=ps.docs.map(d=>({id:d.id,...d.data()}));orders=os.docs.map(d=>({id:d.id,...d.data()}));renderAll()}catch(e){toast("ডেটা লোড হয়নি: "+e.message+" — Firestore Rules/collection পরীক্ষা করুন।")}}
-function renderAll(){renderStats();renderProducts();renderOrders();renderCustomers();renderRecent();renderReports()}
-function renderStats(){const sales=orders.filter(o=>["Delivered","Approved"].includes(statusOf(o))).reduce((s,o)=>s+totalOf(o),0);$("statProducts").textContent=bn(products.length);$("statOrders").textContent=bn(orders.length);$("statSales").textContent=money(sales);$("statPending").textContent=bn(orders.filter(o=>statusOf(o)==="Pending").length)}
-function renderRecent(){$("recentOrders").innerHTML=orders.slice().sort((a,b)=>String(b.createdAt?.seconds??b.createdAt??"").localeCompare(String(a.createdAt?.seconds??a.createdAt??""))).slice(0,5).map(o=>`<tr><td><strong>#${esc(o.id.slice(0,8))}</strong></td><td>${esc(nameOf(o))}<br><span class="hint">${esc(phoneOf(o))}</span></td><td>${dateText(o.createdAt||o.date)}</td><td>${money(totalOf(o))}</td><td>${pill(statusOf(o))}</td></tr>`).join("")||`<tr><td colspan="5" class="empty">এখনো কোনো অর্ডার নেই</td></tr>`;
-$("recentProducts").innerHTML=products.slice(0,5).map(p=>`<tr><td><div class="product-cell">${imgOf(p)?`<img class="thumb" src="${esc(imgOf(p))}" alt="">`:`<div class="thumb"></div>`}<strong>${esc(productName(p))}</strong></div></td><td>${money(priceOf(p))}</td><td>${bn(stockOf(p))}</td><td>${bn((p.images||[]).length|| (imgOf(p)?1:0))}</td></tr>`).join("")||`<tr><td colspan="4" class="empty">কোনো পণ্য যোগ করা হয়নি</td></tr>`}
-function renderProducts(){let q=($("productSearch").value||"").toLowerCase();let list=products.filter(p=>productName(p).toLowerCase().includes(q)||(p.category||"").toLowerCase().includes(q));$("productsTable").innerHTML=list.map(p=>`<tr><td><div class="product-cell">${imgOf(p)?`<img class="thumb" src="${esc(imgOf(p))}" alt="">`:`<div class="thumb"></div>`}<div><strong>${esc(productName(p))}</strong><div class="hint">${esc(p.description||"")}</div></div></div></td><td>${esc(p.category||"—")}</td><td>${money(priceOf(p))}<div class="hint">মূল: ${money(p.basePrice??p.originalPrice??0)}</div></td><td>${bn(stockOf(p))}</td><td>${bn((p.images||[]).length|| (imgOf(p)?1:0))}টি</td><td><div class="actions"><button class="soft smallbtn" data-edit="${p.id}">এডিট</button><button class="danger smallbtn" data-delete="${p.id}">ডিলিট</button></div></td></tr>`).join("")||`<tr><td colspan="6" class="empty">কোনো পণ্য পাওয়া যায়নি</td></tr>`;
-document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openProduct(products.find(p=>p.id===b.dataset.edit)));document.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteProduct(b.dataset.delete))}
-function renderOrders(){const q=($("orderSearch").value||"").toLowerCase(),f=$("orderFilter").value;let list=orders.filter(o=>(!f||statusOf(o)===f)&&[o.id,nameOf(o),phoneOf(o)].join(" ").toLowerCase().includes(q));$("ordersTable").innerHTML=list.map(o=>{let items=o.items??o.products??o.orderItems??[];let itemText=Array.isArray(items)?items.map(i=>(i.name??i.productName??"পণ্য")+" ×"+(i.quantity??i.qty??1)).join(", "):String(items||"—");return `<tr><td><strong>#${esc(o.id.slice(0,9))}</strong></td><td>${esc(nameOf(o))}<div class="hint">${esc(phoneOf(o))}</div><div class="hint">${esc([o.village,o.thana,o.district,o.address].filter(Boolean).join(", "))}</div></td><td>${esc(itemText||"—")}</td><td>${money(totalOf(o))}</td><td>${dateText(o.createdAt||o.date)}</td><td>${pill(statusOf(o))}</td><td><select data-status="${o.id}" aria-label="অর্ডার স্ট্যাটাস"><option ${statusOf(o)==="Pending"?"selected":""}>Pending</option><option ${statusOf(o)==="Approved"?"selected":""}>Approved</option><option ${statusOf(o)==="Shipped"?"selected":""}>Shipped</option><option ${statusOf(o)==="Delivered"?"selected":""}>Delivered</option><option ${statusOf(o)==="Cancelled"?"selected":""}>Cancelled</option></select><button class="primary smallbtn" data-save-status="${o.id}" style="margin-top:5px">সেভ</button></td></tr>`}).join("")||`<tr><td colspan="7" class="empty">কোনো অর্ডার পাওয়া যায়নি</td></tr>`;
-document.querySelectorAll("[data-save-status]").forEach(b=>b.onclick=async()=>{const id=b.dataset.saveStatus,sel=document.querySelector(`[data-status="${id}"]`);try{await updateDoc(doc(db,"orders",id),{status:sel.value,updatedAt:serverTimestamp()});const o=orders.find(x=>x.id===id);o.status=sel.value;renderAll();toast("অর্ডার স্ট্যাটাস আপডেট হয়েছে")}catch(e){toast("আপডেট হয়নি: "+e.message)}})}
-function renderCustomers(){let map=new Map();orders.forEach(o=>{let key=phoneOf(o)||nameOf(o);if(!map.has(key))map.set(key,{name:nameOf(o),phone:phoneOf(o),email:o.email??o.customerEmail??"",address:[o.village,o.thana,o.district,o.address].filter(Boolean).join(", "),count:0,total:0});let c=map.get(key);c.count++;if(["Approved","Delivered"].includes(statusOf(o)))c.total+=totalOf(o)});let q=($("customerSearch").value||"").toLowerCase();let list=[...map.values()].filter(c=>[c.name,c.phone,c.email].join(" ").toLowerCase().includes(q));$("customersTable").innerHTML=list.map(c=>`<tr><td>${esc(c.name)}</td><td>${esc(c.phone||"—")}</td><td>${esc(c.email||"—")}</td><td>${esc(c.address||"—")}</td><td>${bn(c.count)}</td><td>${money(c.total)}</td></tr>`).join("")||`<tr><td colspan="6" class="empty">কাস্টমার ডেটা নেই</td></tr>`}
-function renderReports(){let completed=orders.filter(o=>["Delivered","Approved"].includes(statusOf(o)));let sales=completed.reduce((s,o)=>s+totalOf(o),0),cost=0;completed.forEach(o=>{let items=o.items??o.products??o.orderItems??[];if(Array.isArray(items))items.forEach(i=>cost+=Number(i.basePrice??i.cost??i.originalPrice??0)*Number(i.quantity??i.qty??1))});$("reportSales").textContent=money(sales);$("reportCost").textContent=money(cost);$("reportProfit").textContent=money(Math.max(0,sales-cost));$("reportDelivered").textContent=bn(orders.filter(o=>statusOf(o)==="Delivered").length)}
-$("productSearch").addEventListener("input",renderProducts);$("orderSearch").addEventListener("input",renderOrders);$("orderFilter").addEventListener("change",renderOrders);$("customerSearch").addEventListener("input",renderCustomers);
-$("addProductBtn").onclick=()=>openProduct();
-function openProduct(p=null){selectedFiles=[];const editing=!!p;const root=$("modalRoot");root.classList.remove("hidden");root.innerHTML=`<div class="modal-backdrop"><div class="modal"><h2>${editing?"পণ্য সম্পাদনা":"নতুন পণ্য যোগ করুন"}</h2><form id="productForm"><div class="form-grid">
-<div class="field"><label>পণ্যের নাম *</label><input name="name" required value="${esc(p?.name||p?.productName||"")}"></div>
-<div class="field"><label>ক্যাটাগরি</label><input name="category" value="${esc(p?.category||"")}"></div>
-<div class="field"><label>মূল দাম (৳) *</label><input name="basePrice" type="number" min="0" step="0.01" required value="${esc(p?.basePrice??p?.originalPrice??"")}"></div>
-<div class="field"><label>বিক্রির দাম (৳) *</label><input name="sellingPrice" type="number" min="0" step="0.01" required value="${esc(p?.sellingPrice??p?.price??"")}"></div>
-<div class="field"><label>স্টক সংখ্যা</label><input name="stock" type="number" min="0" step="1" value="${esc(p?.stock??p?.quantity??0)}"></div>
-<div class="field"><label>সাইজ / ভ্যারিয়েন্ট</label><input name="variants" value="${esc(Array.isArray(p?.variants)?p.variants.join(", "):p?.variants||"")}"></div>
-<div class="field span2"><label>বিবরণ</label><textarea name="description">${esc(p?.description||"")}</textarea></div>
-<div class="field span2"><label>পণ্যের ছবি (একাধিক নির্বাচন করা যাবে)</label><input id="productImages" type="file" accept="image/*" multiple><span class="hint">একটি পণ্যের একাধিক ছবি একই পণ্যের সঙ্গে সংরক্ষিত হবে। প্রতি ছবি ৫ MB-এর মধ্যে রাখুন।</span><div id="imagePreview" class="image-preview">${(p?.images||[]).map(u=>`<img src="${esc(u)}" alt="">`).join("")}</div></div>
-</div><p id="productError" class="error"></p><div class="modal-foot"><button type="button" class="mutedbtn" id="cancelProduct">বাতিল</button><button class="primary" type="submit" id="saveProduct">সেভ করুন</button></div></form></div></div>`;
-$("cancelProduct").onclick=()=>root.classList.add("hidden");$("productImages").onchange=e=>{selectedFiles=[...e.target.files];$("imagePreview").innerHTML=[...(p?.images||[]).map(u=>({url:u})),...selectedFiles.map(f=>({file:f}))].map(x=>x.url?`<img src="${esc(x.url)}" alt="">`:`<span class="hint">${esc(x.file.name)}</span>`).join("")};
-$("productForm").onsubmit=async e=>{e.preventDefault();const btn=$("saveProduct");btn.disabled=true;btn.textContent="সেভ হচ্ছে...";$("productError").textContent="";try{const fd=new FormData(e.target);let images=[...(p?.images||[])];for(const file of selectedFiles){if(file.size>5*1024*1024)throw new Error("প্রতি ছবি ৫ MB-এর মধ্যে হতে হবে");const path=`products/${Date.now()}_${Math.random().toString(36).slice(2)}_${file.name.replace(/[^a-zA-Z0-9._-]/g,"_")}`;const r=ref(storage,path);await uploadBytes(r,file);images.push(await getDownloadURL(r))}
-const data={name:String(fd.get("name")).trim(),category:String(fd.get("category")||"").trim(),basePrice:Number(fd.get("basePrice")),sellingPrice:Number(fd.get("sellingPrice")),price:Number(fd.get("sellingPrice")),stock:Number(fd.get("stock")||0),variants:String(fd.get("variants")||"").split(",").map(s=>s.trim()).filter(Boolean),description:String(fd.get("description")||"").trim(),images, imageUrl:images[0]||"",updatedAt:serverTimestamp(),updatedBy:currentUser.email};
-if(editing){await updateDoc(doc(db,"products",p.id),data);products=products.map(x=>x.id===p.id?{...x,...data}:x)}else{data.createdAt=serverTimestamp();data.createdBy=currentUser.email;const r=await addDoc(collection(db,"products"),data);products.unshift({id:r.id,...data})}
-root.classList.add("hidden");renderAll();toast(editing?"পণ্য আপডেট হয়েছে":"নতুন পণ্য যোগ হয়েছে")}catch(err){$("productError").textContent="সেভ হয়নি: "+err.message;btn.disabled=false;btn.textContent="আবার চেষ্টা করুন"}}}
-async function deleteProduct(id){if(!confirm("এই পণ্যটি ডিলিট করতে চান?"))return;try{await deleteDoc(doc(db,"products",id));products=products.filter(p=>p.id!==id);renderAll();toast("পণ্য ডিলিট হয়েছে")}catch(e){toast("ডিলিট হয়নি: "+e.message)}}
-$("exportOrders").onclick=()=>{const rows=[["Order ID","Customer","Phone","Total","Status","Date"],...orders.map(o=>[o.id,nameOf(o),phoneOf(o),totalOf(o),statusOf(o),dateText(o.createdAt||o.date)])];const csv="\uFEFF"+rows.map(r=>r.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));a.download="satata-shop-orders.csv";a.click();URL.revokeObjectURL(a.href)};
-</script>
+      <form id="loginForm">
+        <input
+          id="email"
+          type="email"
+          placeholder="Admin ইমেইল"
+          value="nahidulislam01832@gmail.com"
+          required
+        >
+        <input
+          id="password"
+          type="password"
+          placeholder="Firebase পাসওয়ার্ড"
+          required
+        >
+        <button type="submit" id="loginButton">লগইন করুন</button>
+      </form>
+      <p id="message" role="status"></p>
+    </section>
+
+    <section id="dashboard">
+      <h2>Admin Dashboard</h2>
+      <p>সততা সপ Admin Panel-এ লগইন সফল হয়েছে।</p>
+      <button id="logoutButton">লগআউট</button>
+    </section>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from
+      "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHHTt4EFkH_H5xc2q2rGTC2piSCjOJuKM",
+      authDomain: "satata-shop.firebaseapp.com",
+      projectId: "satata-shop",
+      storageBucket: "satata-shop.firebasestorage.app",
+      messagingSenderId: "964264833764",
+      appId: "1:964264833764:web:7c77ae2f3cb8c782abf2f1",
+      measurementId: "G-1H2H45YG3D"
+    };
+
+    const ADMIN_EMAILS = [
+      "nahidulislam01832@gmail.com"
+    ].map(email => email.toLowerCase());
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const loginSection = document.getElementById("login");
+    const dashboard = document.getElementById("dashboard");
+    const message = document.getElementById("message");
+    const loginButton = document.getElementById("loginButton");
+
+    document.getElementById("loginForm").addEventListener(
+      "submit", async event => {
+        event.preventDefault();
+        message.textContent = "";
+        loginButton.disabled = true;
+
+        const email = document.getElementById("email")
+          .value.trim().toLowerCase();
+        const password = document.getElementById("password").value;
+
+        if (!ADMIN_EMAILS.includes(email)) {
+          message.textContent =
+            "এই ইমেইল Admin Panel-এর অনুমোদিত তালিকায় নেই।";
+          loginButton.disabled = false;
+          return;
+        }
+
+        try {
+          await signInWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+          message.textContent =
+            error.code === "auth/invalid-credential"
+              ? "ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।"
+              : "লগইন হয়নি: " + error.message;
+        } finally {
+          loginButton.disabled = false;
+        }
+      }
+    );
+
+    onAuthStateChanged(auth, user => {
+      const isAdmin = user &&
+        user.email &&
+        ADMIN_EMAILS.includes(user.email.toLowerCase());
+
+      loginSection.style.display = isAdmin ? "none" : "block";
+      dashboard.style.display = isAdmin ? "block" : "none";
+
+      if (user && !isAdmin) {
+        signOut(auth);
+        message.textContent = "এই অ্যাকাউন্ট Admin হিসেবে অনুমোদিত নয়।";
+      }
+    });
+
+    document.getElementById("logoutButton").addEventListener(
+      "click", () => signOut(auth)
+    );
+  </script>
 </body>
 </html>
