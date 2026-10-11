@@ -1,597 +1,194 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#087b48">
-<title>সত্যতা সপ | অনলাইন শপ</title>
+<title>সততা সপ | Online Shop</title>
 
 <style>
 *{box-sizing:border-box}
-:root{
- --green:#087b48;
- --dark:#075631;
- --light:#effaf3;
- --orange:#ffb13b;
- --text:#202820;
-}
-body{
- margin:0;
- font-family:Arial,"Noto Sans Bengali",sans-serif;
- background:#f5f8f5;
- color:var(--text);
-}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-header{
- position:sticky;top:0;z-index:10;
- display:flex;align-items:center;justify-content:space-between;
- gap:10px;padding:12px 15px;background:white;
- box-shadow:0 2px 10px #00000010;
-}
-.brand{display:flex;align-items:center;gap:10px}
-.logo{
- width:44px;height:44px;border-radius:12px;
- display:grid;place-items:center;
- background:var(--green);color:white;font-size:25px;font-weight:bold;
-}
-.brand h1{margin:0;color:var(--green);font-size:20px}
-.brand small{font-size:11px;color:#777}
-.menu-btn{
- border:0;background:var(--light);color:var(--green);
- font-size:25px;border-radius:9px;padding:4px 12px;
-}
-nav{
- display:none;background:white;padding:12px;
- grid-template-columns:1fr 1fr;gap:8px;
-}
-nav.open{display:grid}
-nav a{
- padding:11px;text-decoration:none;color:var(--dark);
- background:var(--light);border-radius:8px;font-size:14px;
-}
-main{max-width:1100px;margin:auto;padding:14px}
-.hero{
- border-radius:18px;padding:25px 19px;color:white;
- background:linear-gradient(130deg,#064d30,#12a35e);
-}
-.hero-tag{
- display:inline-block;background:#ffffff25;
- padding:6px 10px;border-radius:20px;font-size:12px;
-}
-.hero h2{font-size:29px;line-height:1.45;margin:13px 0 8px}
-.hero p{line-height:1.7;font-size:14px}
-.primary,.secondary{
- border:0;border-radius:10px;padding:12px 15px;font-weight:bold;
-}
-.primary{background:var(--orange);color:#342100}
-.secondary{background:var(--green);color:white}
-.search{margin:17px 0}
-.search input{
- width:100%;padding:14px;border:1px solid #dce6dd;
- border-radius:11px;background:white;
-}
-.section{margin:25px 0}
-.section-title{
- display:flex;justify-content:space-between;align-items:center;
- gap:8px;margin-bottom:13px;
-}
-.section-title h2{font-size:20px;margin:0}
-.muted{font-size:12px;color:#737d75}
-.categories{
- display:flex;gap:8px;overflow-x:auto;padding:3px 0 10px;
-}
-.cat{
- flex-shrink:0;border:1px solid #dce8df;background:white;
- color:#334a39;padding:10px 13px;border-radius:25px;
-}
-.cat.active{background:var(--green);color:white}
-.grid{
- display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
-}
-.product{
- overflow:hidden;background:white;border:1px solid #e9eee9;
- border-radius:13px;box-shadow:0 3px 12px #00000008;
-}
-.product-img{
- height:125px;display:grid;place-items:center;font-size:48px;
- background:linear-gradient(135deg,#e4f6e9,#fff0dc);
-}
-.product-info{padding:10px}
-.product-info h3{font-size:14px;line-height:1.5;margin:5px 0}
-.badge{
- display:inline-block;background:#fff1d8;color:#85500a;
- padding:4px 7px;border-radius:5px;font-size:11px;
-}
-.price{font-size:17px;color:var(--green);font-weight:bold;margin-top:7px}
-.stock{font-size:12px;color:#737d75;margin:6px 0}
-.product button{width:100%;font-size:13px}
-.panel{
- background:white;border:1px solid #e6eee7;
- border-radius:13px;padding:15px;
-}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.info-item{background:var(--light);padding:13px;border-radius:10px}
-.info-item b{display:block;margin-bottom:6px}
-.support-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.support-link{
- display:block;text-align:center;text-decoration:none;
- padding:13px 8px;background:var(--light);
- color:var(--dark);border-radius:10px;font-weight:bold;
-}
-footer{
- background:#123b29;color:#eaf6ed;text-align:center;
- padding:24px 12px;line-height:1.9;font-size:13px;
-}
-.modal{
- display:none;position:fixed;inset:0;z-index:50;
- background:#0009;padding:12px;overflow-y:auto;
- align-items:flex-start;justify-content:center;
-}
-.modal.show{display:flex}
-.modal-box{
- width:100%;max-width:520px;margin:auto;
- background:#f8faf8;border-radius:16px;padding:17px;
-}
-.modal-head{
- display:flex;justify-content:space-between;align-items:center;
- gap:8px;margin-bottom:14px;
-}
-.modal-head h2{margin:0;font-size:20px;color:var(--green)}
-.close{
- border:0;background:#e8eee9;border-radius:8px;
- font-size:22px;padding:5px 12px;
-}
-.selected-product{
- padding:12px;background:var(--light);border-radius:9px;
- margin-bottom:14px;font-weight:bold;line-height:1.8;
-}
-#orderForm{display:flex;flex-direction:column;gap:13px}
-#orderForm .form-grid{
- display:flex;flex-direction:column;gap:13px;width:100%;
-}
-#orderForm .form-grid>div{width:100%}
-#orderForm label{
- display:block;font-size:14px;font-weight:bold;
- margin-bottom:6px;
-}
-#orderForm input,#orderForm select,#orderForm textarea{
- display:block;width:100%;min-height:47px;
- padding:12px;border:1px solid #d7e2d9;
- border-radius:9px;background:white;color:#222;
- outline-color:var(--green);font-size:15px;
-}
-#orderForm textarea{min-height:85px;resize:vertical}
-#orderForm .secondary{width:100%;min-height:49px;font-size:16px}
-.result{
- background:#edf9f0;border:1px solid #d5edda;
- padding:12px;border-radius:9px;line-height:1.8;
- overflow-wrap:anywhere;
-}
-.note{
- padding:11px;background:#fff7e7;border:1px solid #f0e1ba;
- border-radius:9px;font-size:12px;line-height:1.7;
-}
-.hidden{display:none!important}
+body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:#f5f7fb;color:#202633}
+header{background:#087b45;color:white;padding:14px 16px}
+.top{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;object-fit:contain;border-radius:10px;background:white}
+.brand{font-size:22px;font-weight:bold}
+header p{margin:5px 0 0;font-size:13px}
+.banner{width:100%;max-height:260px;object-fit:cover;display:none}
+.promo{background:#fff1c8;color:#6d4600;padding:12px;text-align:center;font-weight:bold}
+.container{max-width:1100px;margin:auto;padding:16px}
+.search{width:100%;padding:13px;border:1px solid #d4d9e1;border-radius:10px;font-size:16px;margin-bottom:14px}
+.categories{display:flex;gap:8px;overflow-x:auto;margin-bottom:16px}
+.cat{border:1px solid #ddd;background:white;padding:9px 14px;border-radius:20px;white-space:nowrap;cursor:pointer}
+.cat.active{background:#087b45;color:white}
+h2{font-size:20px}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:white;border-radius:13px;overflow:hidden;box-shadow:0 2px 9px #0000000b}
+.card img{width:100%;height:160px;object-fit:cover;background:#eee}
+.card-body{padding:11px}
+.card h3{font-size:15px;margin:0 0 8px}
+.price{font-weight:bold;color:#087b45;font-size:18px}
+.stock{font-size:12px;color:#687385;margin:7px 0}
+.btn{display:inline-block;border:0;border-radius:8px;background:#087b45;color:white;padding:11px 13px;cursor:pointer;font-size:14px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.secondary{background:#e8f4ed;color:#08683a}
+.order-box,.support{background:white;border-radius:13px;padding:16px;margin-top:20px}
+.order-box{display:none}
+form{display:grid;grid-template-columns:1fr;gap:12px}
+label{font-size:14px;font-weight:bold}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d3d9e1;border-radius:8px;font-size:15px;margin-top:5px;background:white}
+textarea{min-height:80px;resize:vertical}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.summary{background:#f0f8f3;border-radius:9px;padding:12px;line-height:1.8}
+.message{padding:12px;border-radius:8px;margin-top:10px;display:none;overflow-wrap:anywhere}
+.ok{background:#e6f7ed;color:#075b32}
+.err{background:#fff0f0;color:#9c2020}
+.support-links{display:flex;flex-wrap:wrap;gap:8px}
+.support-links a{color:#087b45;background:#e8f4ed;text-decoration:none;padding:10px;border-radius:8px}
+footer{text-align:center;padding:25px;color:#6b7280;font-size:13px}
+.empty{background:white;padding:20px;border-radius:10px;text-align:center}
 @media(min-width:650px){
- main{padding:22px}
- .hero{padding:38px}
- .hero h2{font-size:38px}
- .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
- .product-img{height:175px}
- .brand h1{font-size:22px}
- .modal{align-items:center}
+ .products{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .card img{height:210px}
+ form{grid-template-columns:1fr 1fr}
+ .full{grid-column:1/-1}
 }
+@media(min-width:950px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
 
 <body>
+
 <header>
- <div class="brand">
-  <div class="logo">স</div>
-  <div>
-   <h1>সত্যতা সপ</h1>
-   <small>আপনার বিশ্বস্ত অনলাইন শপ</small>
+  <div class="top">
+    <img id="logo" class="logo" alt="সততা সপ লোগো" hidden>
+    <div>
+      <div class="brand" id="siteName">সততা সপ</div>
+      <p>বিশ্বস্ত অনলাইন শপিং</p>
+    </div>
   </div>
- </div>
- <button class="menu-btn" id="menuBtn" aria-label="মেনু">☰</button>
 </header>
 
-<nav id="mainNav">
- <a href="#home">🏠 হোম</a>
- <a href="#products">🛍️ সকল পণ্য</a>
- <a href="#tracking">📦 অর্ডার ট্র্যাকিং</a>
- <a href="#delivery">🚚 ডেলিভারি চার্জ</a>
- <a href="#support">☎️ যোগাযোগ</a>
-</nav>
+<img id="banner" class="banner" alt="সততা সপ ব্যানার">
+<div id="promo" class="promo" hidden></div>
 
-<main>
-<section class="hero" id="home">
- <span class="hero-tag">🌿 সত্যতা সপ-এ স্বাগতম</span>
- <h2>আপনার পছন্দের পণ্য,<br>এখন হাতের মুঠোয়!</h2>
- <p>পছন্দের পণ্য বেছে নিন। সহজে অর্ডার করুন আপনার ঘরে বসেই।</p>
- <button class="primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
-  এখনই কেনাকাটা করুন →
- </button>
-</section>
+<main class="container">
+  <h2>আমাদের পণ্য</h2>
+  <input id="search" class="search" placeholder="পণ্যের নাম লিখে খুঁজুন..." aria-label="পণ্য খুঁজুন">
 
-<div class="search">
- <input id="search" type="search" placeholder="🔎 পণ্যের নাম লিখে খুঁজুন..." aria-label="পণ্য খুঁজুন">
-</div>
-
-<section class="section">
- <div class="section-title">
-  <h2>📂 পণ্যের ক্যাটাগরি</h2>
-  <span class="muted">ক্যাটাগরি বেছে নিন</span>
- </div>
- <div class="categories" id="categories">
-  <button class="cat active" data-cat="সব">সব পণ্য</button>
-  <button class="cat" data-cat="ছেলেদের পোশাক">ছেলেদের পোশাক</button>
-  <button class="cat" data-cat="মেয়েদের পোশাক">মেয়েদের পোশাক</button>
-  <button class="cat" data-cat="বেবি কালেকশন">বেবি কালেকশন</button>
-  <button class="cat" data-cat="কাপড় ও কম্বো">কাপড় ও কম্বো</button>
-  <button class="cat" data-cat="গৃহস্থালি সামগ্রী">গৃহস্থালি সামগ্রী</button>
-  <button class="cat" data-cat="ব্যাগ কালেকশন">ব্যাগ কালেকশন</button>
-  <button class="cat" data-cat="জুতা কালেকশন">জুতা কালেকশন</button>
-  <button class="cat" data-cat="ইলেকট্রিক ও গ্যাজেট">ইলেকট্রিক ও গ্যাজেট</button>
-  <button class="cat" data-cat="জুয়েলারি ও এক্সেসরিজ">জুয়েলারি ও এক্সেসরিজ</button>
-  <button class="cat" data-cat="ঘড়ি ও ফ্যাশন">ঘড়ি ও ফ্যাশন</button>
-  <button class="cat" data-cat="বিউটি">বিউটি</button>
-  <button class="cat" data-cat="কিচেন">কিচেন</button>
-  <button class="cat" data-cat="হোম ডেকর">হোম ডেকর</button>
-  <button class="cat" data-cat="অফার">অফার</button>
-  <button class="cat" data-cat="অন্যান্য">অন্যান্য</button>
- </div>
-</section>
-
-<section class="section" id="products">
- <div class="section-title">
-  <h2>🛍️ আমাদের পণ্যসমূহ</h2>
-  <span class="muted" id="productCount"></span>
- </div>
- <div class="grid" id="productGrid"></div>
- <p id="noProducts" class="muted hidden" style="text-align:center;padding:20px">
-  কোনো পণ্য পাওয়া যায়নি।
- </p>
-</section>
-
-<section class="section" id="tracking">
- <div class="section-title"><h2>📦 অর্ডার ট্র্যাকিং</h2></div>
- <div class="panel">
-  <p class="muted">অর্ডার নম্বর লিখে আপনার অর্ডারের অবস্থা যাচাই করুন।</p>
-  <form id="trackingForm">
-   <label for="orderId">অর্ডার নম্বর</label>
-   <input id="orderId" required placeholder="যেমন: SAT123456">
-   <button class="secondary" type="submit" style="margin-top:10px;width:100%">অর্ডার খুঁজুন</button>
-  </form>
-  <div id="trackingResult" class="result hidden" style="margin-top:12px"></div>
- </div>
-</section>
-
-<section class="section" id="delivery">
- <div class="section-title"><h2>🚚 ডেলিভারি চার্জ</h2></div>
- <div class="info-grid">
-  <div class="info-item"><b>ঢাকা সিটি</b>৳৭০</div>
-  <div class="info-item"><b>সাব-ঢাকা</b>৳১০০</div>
-  <div class="info-item"><b>ঢাকার বাইরে</b>৳১২০</div>
-  <div class="info-item"><b>অর্ডার সেবা</b>সহজ ও সুবিধাজনক</div>
- </div>
-</section>
-
-<section class="section" id="support">
- <div class="section-title"><h2>☎️ আমাদের সঙ্গে যোগাযোগ</h2></div>
- <div class="support-grid">
-  <a class="support-link" href="https://wa.me/" target="_blank" rel="noopener">🟢 WhatsApp</a>
-  <a class="support-link" href="#" id="imoLink">💬 IMO</a>
-  <a class="support-link" href="https://t.me/" target="_blank" rel="noopener">✈️ Telegram</a>
-  <a class="support-link" href="https://facebook.com/" target="_blank" rel="noopener">📘 Facebook</a>
- </div>
- <p class="muted">সাপোর্ট লিংকগুলো পরে তোমার আসল অ্যাকাউন্টের লিংক দিয়ে পরিবর্তন করতে হবে।</p>
-</section>
-</main>
-
-<footer>
- <strong>সত্যতা সপ</strong><br>
- আপনার বিশ্বস্ত অনলাইন শপ<br>
- © <span id="year"></span> সত্যতা সপ — সর্বস্বত্ব সংরক্ষিত
-</footer>
-
-<div class="modal" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
- <div class="modal-box">
-  <div class="modal-head">
-   <h2 id="modalTitle">🛒 অর্ডার ফরম</h2>
-   <button class="close" id="closeModal" aria-label="বন্ধ করুন">×</button>
+  <div id="categories" class="categories"></div>
+  <div id="productList" class="products">
+    <div class="empty">Firebase থেকে পণ্য লোড হচ্ছে...</div>
   </div>
 
-  <div id="selectedProduct" class="selected-product"></div>
+  <section id="orderBox" class="order-box">
+    <h2>অর্ডার ফর্ম</h2>
+    <p id="selectedName"></p>
 
-  <form id="orderForm">
-   <div class="form-grid">
-
-    <div>
-     <label for="customerName">১. কাস্টমারের নাম *</label>
-     <input id="customerName" required maxlength="100" placeholder="আপনার সম্পূর্ণ নাম">
+    <div class="summary">
+      পণ্যের দাম: ৳<span id="unitPrice">0</span><br>
+      পণ্যের মোট: ৳<span id="productTotal">0</span><br>
+      ডেলিভারি চার্জ: ৳<span id="deliveryCost">70</span><br>
+      <strong>সর্বমোট: ৳<span id="grandTotal">0</span></strong>
     </div>
 
-    <div>
-     <label for="mobile">২. মোবাইল নম্বর *</label>
-     <input id="mobile" type="tel" required maxlength="18" pattern="[0-9০-৯+ -]{10,18}" placeholder="আপনার মোবাইল নম্বর">
-    </div>
+    <form id="orderForm">
+      <div>
+        <label for="customerName">ক্রেতার নাম *</label>
+        <input id="customerName" name="name" required maxlength="100" autocomplete="name">
+      </div>
+      <div>
+        <label for="phone">মোবাইল নম্বর *</label>
+        <input id="phone" name="phone" type="tel" required maxlength="20" autocomplete="tel">
+      </div>
 
-    <div>
-     <label for="altMobile">৩. অন্য মোবাইল নম্বর (ঐচ্ছিক)</label>
-     <input id="altMobile" type="tel" maxlength="18" placeholder="অন্য নম্বর থাকলে লিখুন">
-    </div>
+      <div>
+        <label for="division">বিভাগ *</label>
+        <input id="division" name="division" required maxlength="100">
+      </div>
+      <div>
+        <label for="district">জেলা *</label>
+        <input id="district" name="district" required maxlength="100">
+      </div>
 
-    <div>
-     <label for="village">৪. গ্রাম/এলাকা *</label>
-     <input id="village" required maxlength="100" placeholder="গ্রাম বা এলাকার নাম">
-    </div>
+      <div>
+        <label for="area">থানা / উপজেলা *</label>
+        <input id="area" name="area" required maxlength="100">
+      </div>
+      <div>
+        <label for="village">গ্রাম / এলাকা *</label>
+        <input id="village" name="village" required maxlength="150">
+      </div>
 
-    <div>
-     <label for="thana">৫. থানা/উপজেলা *</label>
-     <input id="thana" required maxlength="100" placeholder="থানা বা উপজেলার নাম">
-    </div>
+      <div class="full">
+        <label for="address">সম্পূর্ণ ঠিকানা *</label>
+        <textarea id="address" name="address" required maxlength="500"
+          placeholder="বাড়ি, রাস্তা ও অন্যান্য ঠিকানা লিখুন"></textarea>
+      </div>
 
-    <div>
-     <label for="district">৬. জেলা *</label>
-     <input id="district" required maxlength="100" placeholder="জেলার নাম">
-    </div>
+      <div>
+        <label for="deliveryZone">ডেলিভারি এলাকা *</label>
+        <select id="deliveryZone" name="deliveryZone" required>
+          <option value="ঢাকার ভিতরে">ঢাকার ভিতরে — ৳70</option>
+          <option value="ঢাকার বাইরে">ঢাকার বাইরে — ৳120</option>
+        </select>
+      </div>
+      <div>
+        <label for="parcelPoint">পার্সেল নেওয়ার স্থান</label>
+        <input id="parcelPoint" name="parcelPoint" maxlength="150"
+          placeholder="কুরিয়ার পয়েন্ট বা বাসার ঠিকানা">
+      </div>
 
-    <div>
-     <label for="receivePoint">৭. পার্সেল রিসিভ পয়েন্ট *</label>
-     <input id="receivePoint" required maxlength="150" placeholder="বাড়ি, দোকান বা কুরিয়ার পয়েন্ট">
-    </div>
+      <div>
+        <label for="size">সাইজ</label>
+        <input id="size" name="size" maxlength="50" placeholder="যেমন: M, L, XL">
+      </div>
+      <div>
+        <label for="color">রং</label>
+        <input id="color" name="color" maxlength="50" placeholder="পছন্দের রং">
+      </div>
 
-    <div>
-     <label for="size">৮. প্রোডাক্টের সাইজ</label>
-     <select id="size">
-      <option value="প্রযোজ্য নয়">প্রযোজ্য নয়</option>
-      <option value="S">S</option>
-      <option value="M">M</option>
-      <option value="L">L</option>
-      <option value="XL">XL</option>
-      <option value="XXL">XXL</option>
-      <option value="অন্যান্য">অন্যান্য</option>
-     </select>
-    </div>
+      <div>
+        <label for="quantity">পরিমাণ *</label>
+        <input id="quantity" name="quantity" type="number" min="1" max="20" value="1" required>
+      </div>
+      <div>
+        <label>পেমেন্ট</label>
+        <input value="Cash on Delivery (পণ্য হাতে পেয়ে মূল্য দিন)" readonly>
+      </div>
 
-    <div>
-     <label for="color">৯. প্রোডাক্টের কালার</label>
-     <input id="color" maxlength="50" placeholder="পছন্দের রং">
-    </div>
+      <div class="full">
+        <button id="submitOrder" class="btn" type="submit" style="width:100%">
+          অর্ডার নিশ্চিত করুন
+        </button>
+        <button id="cancelOrder" class="btn secondary" type="button" style="width:100%;margin-top:8px">
+          বাতিল করুন
+        </button>
+      </div>
+    </form>
 
-    <div>
-     <label for="quantity">১০. প্রোডাক্টের সংখ্যা *</label>
-     <input id="quantity" type="number" min="1" max="20" value="1" required>
-    </div>
+    <div id="orderMessage" class="message" role="status" aria-live="polite"></div>
+  </section>
 
-    <div>
-     <label for="deliveryArea">১১. ডেলিভারি এলাকা *</label>
-     <select id="deliveryArea" required>
-      <option value="70">ঢাকা সিটি — ৳৭০</option>
-      <option value="100">সাব-ঢাকা — ৳১০০</option>
-      <option value="120">ঢাকার বাইরে — ৳১২০</option>
-     </select>
-    </div>
+  <section class="support">
+    <h2>সাহায্য ও যোগাযোগ</h2>
+    <p id="supportText">পণ্য বা অর্ডার সম্পর্কে জানতে আমাদের সঙ্গে যোগাযোগ করুন।</p>
+    <div id="supportLinks" class="support-links"></div>
+  </section>
+</main>
 
-    <div>
-     <label for="advance">১২. চার্জ অগ্রিম নিয়েছেন?</label>
-     <select id="advance">
-      <option value="না">না</option>
-      <option value="হ্যাঁ">হ্যাঁ</option>
-     </select>
-    </div>
-
-    <div>
-     <label for="comments">১৩. অতিরিক্ত নির্দেশনা (ঐচ্ছিক)</label>
-     <textarea id="comments" maxlength="500" placeholder="অতিরিক্ত কিছু জানাতে চাইলে লিখুন"></textarea>
-    </div>
-
-   </div>
-
-   <div id="priceSummary" class="result"></div>
-
-   <div class="note">
-    বর্তমানে এটি প্রাথমিক ডেমো। Firebase সংযোগ করার পরে অর্ডার ডেটাবেসে পাঠানো ও অ্যাডমিন প্যানেলে দেখানোর ব্যবস্থা চালু করতে হবে।
-   </div>
-
-   <button class="secondary" type="submit">অর্ডারের তথ্য যাচাই করুন</button>
-  </form>
-
-  <div id="orderResult" class="result hidden" style="margin-top:12px"></div>
- </div>
-</div>
-
-<script>
-"use strict";
-
-/* নমুনা পণ্য। পরে Firebase থেকে পণ্য দেখানো হবে। */
-const products=[
- {id:"p1",name:"কটন টি-শার্ট",category:"ছেলেদের পোশাক",price:500,stock:10,emoji:"👕",badge:"জনপ্রিয়"},
- {id:"p2",name:"মেয়েদের সুন্দর পোশাক",category:"মেয়েদের পোশাক",price:850,stock:8,emoji:"👗",badge:"নতুন"},
- {id:"p3",name:"বেবি ড্রেস",category:"বেবি কালেকশন",price:450,stock:12,emoji:"🧸",badge:""},
- {id:"p4",name:"ফ্যামিলি কাপড় কম্বো",category:"কাপড় ও কম্বো",price:1200,stock:5,emoji:"🧵",badge:"অফার"},
- {id:"p5",name:"হোম স্টোরেজ বক্স",category:"গৃহস্থালি সামগ্রী",price:350,stock:15,emoji:"🧺",badge:""},
- {id:"p6",name:"ফ্যাশন ব্যাগ",category:"ব্যাগ কালেকশন",price:650,stock:7,emoji:"👜",badge:"নতুন"},
- {id:"p7",name:"ক্যাজুয়াল জুতা",category:"জুতা কালেকশন",price:950,stock:6,emoji:"👟",badge:""},
- {id:"p8",name:"স্মার্ট গ্যাজেট",category:"ইলেকট্রিক ও গ্যাজেট",price:750,stock:9,emoji:"🎧",badge:"জনপ্রিয়"},
- {id:"p9",name:"ফ্যাশন জুয়েলারি",category:"জুয়েলারি ও এক্সেসরিজ",price:300,stock:20,emoji:"💍",badge:""},
- {id:"p10",name:"ফ্যাশন ঘড়ি",category:"ঘড়ি ও ফ্যাশন",price:550,stock:11,emoji:"⌚",badge:""},
- {id:"p11",name:"বিউটি কেয়ার সেট",category:"বিউটি",price:600,stock:5,emoji:"🧴",badge:""},
- {id:"p12",name:"কিচেন সামগ্রী",category:"কিচেন",price:400,stock:14,emoji:"🍳",badge:""}
-];
-
-let activeCategory="সব";
-let selectedProduct=null;
-
-const $=id=>document.getElementById(id);
-const grid=$("productGrid");
-const modal=$("orderModal");
-
-function money(n){
- return "৳"+Number(n).toLocaleString("bn-BD");
-}
-
-function renderProducts(){
- const query=$("search").value.trim().toLocaleLowerCase();
- const list=products.filter(p=>
-  (activeCategory==="সব"||p.category===activeCategory)&&
-  (p.name.toLocaleLowerCase().includes(query)||
-   p.category.toLocaleLowerCase().includes(query))
- );
-
- grid.replaceChildren();
- $("productCount").textContent=list.length.toLocaleString("bn-BD")+"টি পণ্য";
- $("noProducts").classList.toggle("hidden",list.length>0);
-
- list.forEach(p=>{
-  const card=document.createElement("article");
-  card.className="product";
-
-  const img=document.createElement("div");
-  img.className="product-img";
-  img.textContent=p.emoji;
-
-  const info=document.createElement("div");
-  info.className="product-info";
-
-  if(p.badge){
-   const badge=document.createElement("span");
-   badge.className="badge";
-   badge.textContent=p.badge;
-   info.appendChild(badge);
-  }
-
-  const title=document.createElement("h3");
-  title.textContent=p.name;
-
-  const cat=document.createElement("div");
-  cat.className="muted";
-  cat.textContent=p.category;
-
-  const price=document.createElement("div");
-  price.className="price";
-  price.textContent=money(p.price);
-
-  const stock=document.createElement("div");
-  stock.className="stock";
-  stock.textContent=p.stock>0
-   ?"স্টকে আছে: "+p.stock.toLocaleString("bn-BD")+"টি"
-   :"স্টক শেষ";
-
-  const btn=document.createElement("button");
-  btn.className="secondary";
-  btn.textContent="অর্ডার করুন";
-  btn.disabled=p.stock<1;
-  btn.addEventListener("click",()=>openOrder(p));
-
-  info.append(title,cat,price,stock,btn);
-  card.append(img,info);
-  grid.appendChild(card);
- });
-}
-
-function openOrder(p){
- selectedProduct=p;
- $("selectedProduct").textContent=p.name+" — "+money(p.price);
- $("orderForm").reset();
- $("quantity").value="1";
- $("orderResult").classList.add("hidden");
- updatePrice();
- modal.classList.add("show");
- document.body.style.overflow="hidden";
-}
-
-function closeOrder(){
- modal.classList.remove("show");
- document.body.style.overflow="";
-}
-
-function updatePrice(){
- if(!selectedProduct)return;
- const qty=Math.max(1,Math.min(20,Number($("quantity").value)||1));
- const delivery=Number($("deliveryArea").value)||70;
- $("priceSummary").textContent=
-  "পণ্যের দাম: "+money(selectedProduct.price*qty)+
-  " | ডেলিভারি চার্জ: "+money(delivery)+
-  " | সর্বমোট: "+money(selectedProduct.price*qty+delivery);
-}
-
-$("menuBtn").addEventListener("click",()=>{
- $("mainNav").classList.toggle("open");
-});
-
-document.querySelectorAll("#mainNav a").forEach(a=>{
- a.addEventListener("click",()=>$("mainNav").classList.remove("open"));
-});
-
-document.querySelectorAll(".cat").forEach(btn=>{
- btn.addEventListener("click",()=>{
-  document.querySelectorAll(".cat").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  activeCategory=btn.dataset.cat;
-  renderProducts();
- });
-});
-
-$("search").addEventListener("input",renderProducts);
-$("quantity").addEventListener("input",updatePrice);
-$("deliveryArea").addEventListener("change",updatePrice);
-$("closeModal").addEventListener("click",closeOrder);
-
-modal.addEventListener("click",e=>{
- if(e.target===modal)closeOrder();
-});
-
-document.addEventListener("keydown",e=>{
- if(e.key==="Escape")closeOrder();
-});
-
-$("orderForm").addEventListener("submit",e=>{
- e.preventDefault();
- if(!selectedProduct)return;
-
- const qty=Number($("quantity").value);
- if(!Number.isInteger(qty)||qty<1||qty>20){
-  alert("পরিমাণ ১ থেকে ২০-এর মধ্যে দিন।");
-  return;
- }
-
- if(qty>selectedProduct.stock){
-  alert("দুঃখিত, পর্যাপ্ত পণ্য স্টকে নেই।");
-  return;
- }
-
- const total=selectedProduct.price*qty+Number($("deliveryArea").value);
- $("orderResult").classList.remove("hidden");
- $("orderResult").textContent=
-  "ফরমের তথ্য যাচাই হয়েছে। মোট মূল্য "+money(total)+
-  "। এটি ডেমো মাত্র; অর্ডার এখনো ডেটাবেসে পাঠানো হয়নি।";
-});
-
-$("trackingForm").addEventListener("submit",e=>{
- e.preventDefault();
- $("trackingResult").classList.remove("hidden");
- $("trackingResult").textContent=
-  "এখনো বাস্তব অর্ডার ট্র্যাকিং চালু হয়নি। Firebase ও নিরাপদ অর্ডার যাচাই ব্যবস্থা যুক্ত করার পরে এটি কাজ করবে।";
-});
-
-$("imoLink").addEventListener("click",e=>{
- e.preventDefault();
- alert("IMO-এর আসল লিংক বা নম্বর পরে যোগ করতে হবে।");
-});
-
-$("year").textContent=new Date().getFullYear();
-renderProducts();
+<footer>© <span id="year"></span> সততা সপ — সর্বস্বত্ব সংরক্ষিত</footer>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { initializeApp } from
+  "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
 import {
-  getFirestore, collection, doc, getDoc, addDoc,
-  onSnapshot, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+  getFirestore, collection, onSnapshot, doc, getDoc, addDoc, serverTimestamp
+} from
+  "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+/* Firebase Console → Project settings → Your apps থেকে
+   প্রয়োজনে এই কনফিগারেশন মিলিয়ে নেবে। */
 
 const firebaseConfig = {
   apiKey: "AIzaSyDHHTt4EFkH_H5xc2q2rGTC2piSCjOJuKM",
@@ -605,334 +202,339 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
 const $ = id => document.getElementById(id);
 
-let products = [];
+let allProducts = [];
 let selectedProduct = null;
 let activeCategory = "সব";
+let stopProducts = null;
 
-function money(n) {
-  return "৳" + Number(n || 0).toLocaleString("bn-BD");
+$("year").textContent = new Date().getFullYear();
+
+function money(value) {
+  return Math.max(0, Number(value) || 0);
 }
 
 function safeText(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;",
-    '"':"&quot;", "'":"&#39;"
-  })[c]);
+  return String(value ?? "");
 }
 
-/* Firebase থেকে পণ্য নিয়ে দেখানো */
+function getImage(product) {
+  if (Array.isArray(product.images) && product.images.length) {
+    return product.images[0];
+  }
+  return product.image || product.imageUrl || "";
+}
+
+function showMessage(message, type = "ok") {
+  const el = $("orderMessage");
+  el.textContent = message;
+  el.className = "message " + type;
+  el.style.display = "block";
+}
+
+function renderCategories() {
+  const names = ["সব", ...new Set(
+    allProducts.map(p => p.category).filter(Boolean)
+  )];
+
+  const root = $("categories");
+  root.replaceChildren();
+
+  names.forEach(name => {
+    const button = document.createElement("button");
+    button.className = "cat" + (name === activeCategory ? " active" : "");
+    button.textContent = name;
+    button.type = "button";
+    button.addEventListener("click", () => {
+      activeCategory = name;
+      renderCategories();
+      renderProducts();
+    });
+    root.appendChild(button);
+  });
+}
+
 function renderProducts() {
+  const root = $("productList");
+  root.replaceChildren();
+
   const query = $("search").value.trim().toLowerCase();
 
-  const list = products.filter(p => {
-    const category = p.category || "অন্যান্য";
-    const name = p.name || p.title || "পণ্য";
-    return (activeCategory === "সব" || category === activeCategory) &&
-      (name.toLowerCase().includes(query) ||
-       category.toLowerCase().includes(query));
+  const filtered = allProducts.filter(p => {
+    const matchesCategory =
+      activeCategory === "সব" || p.category === activeCategory;
+    const matchesSearch =
+      safeText(p.name).toLowerCase().includes(query) ||
+      safeText(p.category).toLowerCase().includes(query);
+    return matchesCategory && matchesSearch;
   });
 
-  const grid = $("productGrid");
-  grid.replaceChildren();
+  if (!filtered.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = allProducts.length
+      ? "কোনো মিল থাকা পণ্য পাওয়া যায়নি।"
+      : "এখনো কোনো পণ্য যোগ করা হয়নি।";
+    root.appendChild(empty);
+    return;
+  }
 
-  $("productCount").textContent =
-    list.length.toLocaleString("bn-BD") + "টি পণ্য";
-  $("noProducts").classList.toggle("hidden", list.length > 0);
-
-  list.forEach(p => {
+  filtered.forEach(p => {
     const card = document.createElement("article");
-    card.className = "product";
+    card.className = "card";
 
-    const imageBox = document.createElement("div");
-    imageBox.className = "product-img";
+    const image = document.createElement("img");
+    image.loading = "lazy";
+    image.alt = safeText(p.name);
+    image.src = getImage(p);
+    image.onerror = () => { image.style.display = "none"; };
 
-    const imageUrl = Array.isArray(p.images) && p.images.length
-      ? p.images[0]
-      : (p.image || p.imageUrl || "");
+    const body = document.createElement("div");
+    body.className = "card-body";
 
-    if (imageUrl) {
-      const img = document.createElement("img");
-      img.src = imageUrl;
-      img.alt = p.name || "পণ্য";
-      img.loading = "lazy";
-      img.style.cssText =
-        "width:100%;height:100%;object-fit:cover";
-      imageBox.appendChild(img);
-    } else {
-      imageBox.textContent = "🛍️";
-    }
-
-    const info = document.createElement("div");
-    info.className = "product-info";
-
-    if (p.badge) {
-      const badge = document.createElement("span");
-      badge.className = "badge";
-      badge.textContent = p.badge;
-      info.appendChild(badge);
-    }
-
-    const title = document.createElement("h3");
-    title.textContent = p.name || p.title || "নাম দেওয়া নেই";
-
-    const category = document.createElement("div");
-    category.className = "muted";
-    category.textContent = p.category || "অন্যান্য";
+    const name = document.createElement("h3");
+    name.textContent = safeText(p.name || "নামহীন পণ্য");
 
     const price = document.createElement("div");
     price.className = "price";
-    price.textContent = money(p.price);
+    price.textContent = "৳" + money(p.price).toLocaleString("en-US");
 
     const stock = document.createElement("div");
     stock.className = "stock";
-    stock.textContent = Number(p.stock || 0) > 0
-      ? "স্টকে আছে: " + Number(p.stock).toLocaleString("bn-BD") + "টি"
-      : "স্টক শেষ";
+    const hasStock = p.stock === undefined || Number(p.stock) > 0;
+    stock.textContent = hasStock ? "স্টক আছে / যাচাইসাপেক্ষ" : "স্টক শেষ";
+
+    const details = document.createElement("p");
+    details.style.fontSize = "13px";
+    details.textContent = safeText(p.description || p.category || "");
 
     const button = document.createElement("button");
-    button.className = "secondary";
+    button.className = "btn";
+    button.type = "button";
     button.textContent = "অর্ডার করুন";
-    button.disabled = Number(p.stock || 0) < 1;
+    button.disabled = !hasStock || money(p.price) <= 0;
     button.addEventListener("click", () => openOrder(p));
 
-    info.append(title, category, price, stock, button);
-    card.append(imageBox, info);
-    grid.appendChild(card);
+    body.append(name, price, stock, details, button);
+    card.append(image, body);
+    root.appendChild(card);
   });
 }
 
-/* অ্যাডমিন প্যানেলের products collection পর্যবেক্ষণ */
-onSnapshot(collection(db, "products"), snapshot => {
-  products = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderProducts();
-}, error => {
-  console.error(error);
-  alert("পণ্য লোড হয়নি। Firebase Rules ও সংযোগ পরীক্ষা করুন।");
-});
-
-/* অ্যাডমিন প্যানেলের logo/banner/support settings */
-onSnapshot(doc(db, "settings", "site"), snapshot => {
-  if (!snapshot.exists()) return;
-  const s = snapshot.data();
-
-  document.title = (s.siteName || "সত্যতা সপ") + " | অনলাইন শপ";
-
-  const heading = document.querySelector(".brand h1");
-  if (heading && s.siteName) heading.textContent = s.siteName;
-
-  const logo = document.querySelector(".logo");
-  if (logo && s.logoUrl) {
-    logo.textContent = "";
-    const img = document.createElement("img");
-    img.src = s.logoUrl;
-    img.alt = s.siteName || "লোগো";
-    img.style.cssText =
-      "width:100%;height:100%;object-fit:contain;border-radius:12px";
-    logo.appendChild(img);
-    logo.style.background = "white";
-  }
-
-  const hero = document.querySelector(".hero");
-  if (hero && s.bannerUrl) {
-    hero.style.backgroundImage =
-      "linear-gradient(#064d30a8,#12a35e99),url('" +
-      s.bannerUrl.replace(/['()]/g, "") + "')";
-    hero.style.backgroundSize = "cover";
-    hero.style.backgroundPosition = "center";
-  }
-
-  const heroHeading = document.querySelector(".hero h2");
-  if (heroHeading && s.promoText) heroHeading.textContent = s.promoText;
-
-  const links = {
-    whatsapp: s.whatsappLink ||
-      (s.whatsappNumber
-        ? "https://wa.me/" + s.whatsappNumber.replace(/\D/g, "")
-        : ""),
-    telegram: s.telegramLink || "",
-    facebook: s.facebookLink || "",
-    imo: s.imoNumber || ""
-  };
-
-  const supportLinks = document.querySelectorAll(".support-link");
-  const destinations = [
-    links.whatsapp, links.imo, links.telegram, links.facebook
-  ];
-
-  supportLinks.forEach((a, index) => {
-    const url = destinations[index];
-    if (url && /^https?:\/\//i.test(url)) {
-      a.href = url;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-    } else {
-      a.href = "#support";
-    }
-  });
-}, error => console.error("Settings:", error));
-
-/* ক্যাটাগরি ও সার্চ */
-$("search").addEventListener("input", renderProducts);
-
-document.querySelectorAll(".cat").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".cat").forEach(b =>
-      b.classList.remove("active")
-    );
-    button.classList.add("active");
-    activeCategory = button.dataset.cat;
-    renderProducts();
-  });
-});
-
-$("menuBtn").addEventListener("click", () => {
-  $("mainNav").classList.toggle("open");
-});
-
-document.querySelectorAll("#mainNav a").forEach(a => {
-  a.addEventListener("click", () =>
-    $("mainNav").classList.remove("open")
-  );
-});
-
-/* অর্ডার ফরম */
 function openOrder(product) {
   selectedProduct = product;
-  $("selectedProduct").textContent =
-    (product.name || product.title || "পণ্য") +
-    " — " + money(product.price);
-
-  $("orderForm").reset();
+  $("selectedName").textContent =
+    "নির্বাচিত পণ্য: " + safeText(product.name);
+  $("unitPrice").textContent = money(product.price);
+  $("orderBox").style.display = "block";
+  $("orderMessage").style.display = "none";
   $("quantity").value = "1";
-  $("orderResult").classList.add("hidden");
-  updatePrice();
-
-  $("orderModal").classList.add("show");
-  document.body.style.overflow = "hidden";
+  $("orderBox").scrollIntoView({ behavior: "smooth", block: "start" });
+  updateTotals();
 }
 
-function closeOrder() {
-  $("orderModal").classList.remove("show");
-  document.body.style.overflow = "";
-}
-
-$("closeModal").addEventListener("click", closeOrder);
-
-$("orderModal").addEventListener("click", e => {
-  if (e.target === $("orderModal")) closeOrder();
-});
-
-document.addEventListener("keydown", e => {
-  if (e.key === "Escape") closeOrder();
-});
-
-function updatePrice() {
+function updateTotals() {
   if (!selectedProduct) return;
 
-  const quantity = Math.max(
-    1, Math.min(20, Number($("quantity").value) || 1)
-  );
-  const delivery = Number($("deliveryArea").value) || 70;
-  const total = Number(selectedProduct.price) * quantity + delivery;
+  const quantity = Math.min(20, Math.max(1, Number($("quantity").value) || 1));
+  const zone = $("deliveryZone").value;
+  const delivery = zone === "ঢাকার বাইরে" ? 120 : 70;
+  const productTotal = money(selectedProduct.price) * quantity;
 
-  $("priceSummary").textContent =
-    "পণ্যের দাম: " + money(Number(selectedProduct.price) * quantity) +
-    " | ডেলিভারি চার্জ: " + money(delivery) +
-    " | সর্বমোট: " + money(total);
+  $("deliveryCost").textContent = delivery;
+  $("productTotal").textContent = productTotal.toLocaleString("en-US");
+  $("grandTotal").textContent =
+    (productTotal + delivery).toLocaleString("en-US");
 }
 
-$("quantity").addEventListener("input", updatePrice);
-$("deliveryArea").addEventListener("change", updatePrice);
+$("search").addEventListener("input", renderProducts);
+$("quantity").addEventListener("input", updateTotals);
+$("deliveryZone").addEventListener("change", updateTotals);
 
-/* অর্ডার Firestore-এ সংরক্ষণ */
-$("orderForm").addEventListener("submit", async e => {
-  e.preventDefault();
-  if (!selectedProduct) return;
+$("cancelOrder").addEventListener("click", () => {
+  $("orderBox").style.display = "none";
+  selectedProduct = null;
+});
 
-  const button = $("orderForm").querySelector('button[type="submit"]');
-  if (button.disabled) return;
+$("orderForm").addEventListener("submit", async event => {
+  event.preventDefault();
 
-  const quantity = Number($("quantity").value);
-  const stock = Number(selectedProduct.stock || 0);
-
-  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) {
-    alert("পরিমাণ ১ থেকে ২০-এর মধ্যে দিন।");
+  if (!selectedProduct) {
+    showMessage("আগে একটি পণ্য নির্বাচন করুন।", "err");
     return;
   }
 
-  if (quantity > stock) {
-    alert("পর্যাপ্ত পণ্য স্টকে নেই।");
-    return;
-  }
-
-  const mobile = $("mobile").value.trim();
-  if (!/^[0-9০-৯+ -]{10,18}$/.test(mobile)) {
-    alert("সঠিক মোবাইল নম্বর লিখুন।");
-    return;
-  }
-
-  const deliveryCharge = Number($("deliveryArea").value) || 70;
-  const totalPrice = Number(selectedProduct.price) * quantity +
-    deliveryCharge;
-
-  const order = {
-    customerName: $("customerName").value.trim(),
-    mobile,
-    altMobile: $("altMobile").value.trim(),
-    village: $("village").value.trim(),
-    thana: $("thana").value.trim(),
-    district: $("district").value.trim(),
-    receivePoint: $("receivePoint").value.trim(),
-    size: $("size").value,
-    color: $("color").value.trim(),
-    quantity,
-    deliveryCharge,
-    advance: $("advance").value,
-    comments: $("comments").value.trim(),
-    productId: selectedProduct.id,
-    productName: selectedProduct.name || selectedProduct.title || "পণ্য",
-    productPrice: Number(selectedProduct.price),
-    totalPrice,
-    status: "pending",
-    createdAt: serverTimestamp()
-  };
-
+  const button = $("submitOrder");
   button.disabled = true;
-  button.textContent = "অর্ডার পাঠানো হচ্ছে...";
+  button.textContent = "অর্ডার জমা হচ্ছে...";
 
   try {
-    const saved = await addDoc(collection(db, "orders"), order);
+    const quantity = Math.min(20, Math.max(1, Number($("quantity").value) || 1));
+    const unitPrice = money(selectedProduct.price);
+    const productTotal = unitPrice * quantity;
+    const deliveryZone = $("deliveryZone").value;
+    const deliveryCharge = deliveryZone === "ঢাকার বাইরে" ? 120 : 70;
+    const total = productTotal + deliveryCharge;
 
-    $("orderResult").classList.remove("hidden");
-    $("orderResult").textContent =
-      "আপনার অর্ডার জমা হয়েছে! অর্ডার নম্বর: " + saved.id +
-      "। মোট মূল্য: " + money(totalPrice) +
-      "। অর্ডার নম্বরটি সংরক্ষণ করুন।";
+    if (!safeText($("customerName").value).trim() ||
+        !safeText($("phone").value).trim() ||
+        !safeText($("division").value).trim() ||
+        !safeText($("district").value).trim() ||
+        !safeText($("area").value).trim() ||
+        !safeText($("village").value).trim() ||
+        !safeText($("address").value).trim()) {
+      throw new Error("সব প্রয়োজনীয় ঘর পূরণ করুন।");
+    }
 
-    $("orderId").value = saved.id;
+    const orderData = {
+      productId: safeText(selectedProduct.id),
+      productName: safeText(selectedProduct.name),
+      unitPrice,
+      productTotal,
+      deliveryCharge,
+      total,
+      name: $("customerName").value.trim(),
+      phone: $("phone").value.trim(),
+      quantity: String(quantity),
+      deliveryZone,
+      division: $("division").value.trim(),
+      district: $("district").value.trim(),
+      area: $("area").value.trim(),
+      village: $("village").value.trim(),
+      address: $("address").value.trim(),
+      parcelPoint: $("parcelPoint").value.trim(),
+      size: $("size").value.trim(),
+      color: $("color").value.trim(),
+      payment: "Cash on Delivery",
+      status: "অর্ডার গ্রহণের অপেক্ষায়",
+      createdAt: serverTimestamp()
+    };
+
+    const result = await addDoc(collection(db, "orders"), orderData);
+
+    showMessage(
+      "অর্ডার জমা হয়েছে। আপনার অর্ডার নম্বর: " + result.id +
+      "। নম্বরটি সংরক্ষণ করে রাখুন।",
+      "ok"
+    );
+
     $("orderForm").reset();
-    updatePrice();
+    $("quantity").value = "1";
+    $("deliveryZone").value = "ঢাকার ভিতরে";
+    updateTotals();
+    button.textContent = "অর্ডার জমা হয়েছে";
+
   } catch (error) {
-    console.error(error);
-    alert("অর্ডার জমা হয়নি। ইন্টারনেট ও Firebase Rules পরীক্ষা করুন।");
-  } finally {
+    console.error("Order submission error:", error);
+    showMessage(
+      error.message && error.message.includes("সব প্রয়োজনীয়")
+        ? error.message
+        : "অর্ডার জমা হয়নি। Firebase Rules, ইন্টারনেট এবং পণ্যের তথ্য পরীক্ষা করতে হবে।",
+      "err"
+    );
     button.disabled = false;
-    button.textContent = "অর্ডারের তথ্য যাচাই করুন";
+    button.textContent = "আবার চেষ্টা করুন";
+    return;
   }
+
+  button.disabled = false;
+  button.textContent = "অর্ডার নিশ্চিত করুন";
 });
 
-/* নিরাপদ সার্ভার-সাইড যাচাই যুক্ত না হওয়া পর্যন্ত
-   পাবলিক অর্ডার ট্র্যাকিং চালু করা হয়নি। */
-$("trackingForm").addEventListener("submit", e => {
-  e.preventDefault();
-  $("trackingResult").classList.remove("hidden");
-  $("trackingResult").textContent =
-    "আপনার অর্ডার নম্বর: " + $("orderId").value.trim() +
-    "। অর্ডারের বর্তমান অবস্থা জানতে সাপোর্টে যোগাযোগ করুন।";
-});
+async function loadSiteSettings() {
+  try {
+    const snapshot = await getDoc(doc(db, "settings", "site"));
+    if (!snapshot.exists()) return;
 
-$("year").textContent = new Date().getFullYear();
+    const data = snapshot.data();
+
+    if (data.siteName) $("siteName").textContent = data.siteName;
+    if (data.promoText) {
+      $("promo").textContent = data.promoText;
+      $("promo").hidden = false;
+    }
+
+    if (data.logoUrl) {
+      $("logo").src = data.logoUrl;
+      $("logo").hidden = false;
+      $("logo").onerror = () => { $("logo").hidden = true; };
+    }
+
+    if (data.bannerUrl) {
+      $("banner").src = data.bannerUrl;
+      $("banner").style.display = "block";
+      $("banner").onerror = () => { $("banner").style.display = "none"; };
+    }
+
+    if (data.supportText) $("supportText").textContent = data.supportText;
+
+    const links = $("supportLinks");
+    links.replaceChildren();
+
+    const supportItems = [
+      ["WhatsApp", data.whatsappLink],
+      ["Telegram", data.telegramLink],
+      ["Messenger", data.messengerLink]
+    ];
+
+    supportItems.forEach(([label, url]) => {
+      if (!url || !/^https:\/\/\S+/i.test(url)) return;
+      const a = document.createElement("a");
+      a.href = url;
+      a.textContent = label;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      links.appendChild(a);
+    });
+
+    if (data.phoneNumber) {
+      const a = document.createElement("a");
+      a.href = "tel:" + data.phoneNumber;
+      a.textContent = "ফোন করুন";
+      links.appendChild(a);
+    }
+
+    if (data.supportEmail) {
+      const a = document.createElement("a");
+      a.href = "mailto:" + data.supportEmail;
+      a.textContent = "ইমেইল";
+      links.appendChild(a);
+    }
+
+  } catch (error) {
+    console.error("Site settings error:", error);
+  }
+}
+
+function loadProducts() {
+  if (stopProducts) stopProducts();
+
+  stopProducts = onSnapshot(collection(db, "products"), snapshot => {
+    allProducts = snapshot.docs.map(item => ({
+      id: item.id,
+      ...item.data()
+    }));
+
+    renderCategories();
+    renderProducts();
+
+  }, error => {
+    console.error("Products loading error:", error);
+    $("productList").replaceChildren();
+
+    const message = document.createElement("div");
+    message.className = "empty";
+    message.textContent =
+      "পণ্য লোড করা যায়নি। Firestore Rules ও products কালেকশন পরীক্ষা করুন।";
+    $("productList").appendChild(message);
+  });
+}
+
+loadProducts();
+loadSiteSettings();
 </script>
- 
+
+</body>
+</html>
