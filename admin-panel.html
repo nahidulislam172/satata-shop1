@@ -3,220 +3,555 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Panel | সততা সপ</title>
 <style>
-:root{--p:#0f766e;--d:#12332f;--bg:#f3f7f6;--b:#dce7e4;--red:#dc2626}
+:root{--primary:#087443;--dark:#075b36;--bg:#f3f6f4;--text:#17251d;--red:#c62828}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:var(--bg);color:#172b28}
-button,input,textarea,select{font:inherit}
-button{border:0;border-radius:8px;padding:11px 14px;background:var(--p);color:white;cursor:pointer}
-button:disabled{opacity:.6}
-input,textarea,select{width:100%;padding:11px;border:1px solid var(--b);border-radius:8px;background:white}
-textarea{min-height:80px}
-label{display:block;margin:12px 0 6px;font-weight:bold;font-size:14px}
-h1,h2,h3{margin-top:0}
+body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--primary);color:white;padding:17px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+header h2{margin:0;font-size:21px}
+button{border:0;border-radius:7px;padding:11px 14px;background:var(--primary);color:white;cursor:pointer;font-size:14px}
+button:hover{opacity:.9}
+button.secondary{background:#53645a}
+button.danger{background:var(--red)}
+button.light{background:#e4f3e9;color:var(--dark)}
+main{max-width:1150px;margin:20px auto;padding:0 14px}
+.card{background:white;padding:18px;border-radius:12px;margin-bottom:17px;box-shadow:0 2px 10px #0000000a}
+h3{margin:0 0 15px}
+input,textarea,select{width:100%;padding:12px;margin:6px 0 13px;border:1px solid #ccd5ce;border-radius:7px;font-size:15px;background:white;color:#17251d}
+textarea{min-height:85px;resize:vertical}
+label{font-size:14px;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{background:#e8f5ec;padding:17px;border-radius:10px}
+.stat span{display:block;font-size:13px}
+.stat strong{display:block;font-size:25px;margin-top:8px;overflow-wrap:anywhere}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+.tabs button{background:#dce8df;color:#174c30}
+.tabs button.active{background:var(--primary);color:white}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>*{flex:1}
+.item{border:1px solid #e0e6e1;border-radius:9px;padding:13px;margin:10px 0;overflow-wrap:anywhere}
+.item img{width:85px;height:85px;object-fit:cover;border-radius:7px;margin:5px 5px 5px 0}
+.muted{color:#657168;font-size:13px}
+.notice{padding:12px;border-radius:8px;margin-bottom:14px;background:#fff4d6;color:#6b4d00;overflow-wrap:anywhere}
+#app{display:none}
+#message{white-space:pre-wrap;overflow-wrap:anywhere}
 .hidden{display:none!important}
-.small{font-size:13px;color:#637571}
-.card{background:white;border:1px solid var(--b);border-radius:12px;padding:16px;margin-bottom:14px}
-.danger{background:var(--red)}.secondary{background:#e4efec;color:#17463e}
-.login{max-width:420px;margin:8vh auto;padding:16px}
-header{background:var(--d);color:white;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-header h2{font-size:19px;margin:0}
-.layout{display:flex;min-height:calc(100vh - 60px)}
-nav{width:220px;flex-shrink:0;background:white;padding:10px;border-right:1px solid var(--b)}
-nav button{display:block;width:100%;text-align:left;margin:4px 0;background:white;color:#24443e}
-nav button.active{background:#dff3ee;color:#075e52}
-main{flex:1;min-width:0;max-width:1250px;padding:18px}
-.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
-.stat{background:white;border:1px solid var(--b);border-radius:12px;padding:14px}
-.stat span{font-size:13px;color:#637571}.stat strong{display:block;font-size:24px;margin-top:8px}
-.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:150px}
-.item{background:white;border:1px solid var(--b);border-radius:10px;padding:12px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
-.item img{width:75px;height:75px;object-fit:cover;border-radius:8px}
-.item-info{flex:1;min-width:150px;overflow-wrap:anywhere}
-.actions{display:flex;gap:6px;flex-wrap:wrap}.actions button{padding:8px;font-size:13px}
-.preview{max-width:100%;max-height:130px;object-fit:contain;margin:5px}
-#msg{position:fixed;bottom:15px;left:50%;transform:translateX(-50%);background:#183b34;color:white;padding:12px 16px;border-radius:9px;max-width:92%;z-index:10}
-@media(max-width:800px){.layout{display:block}nav{width:100%;display:flex;overflow-x:auto;border-right:0;border-bottom:1px solid var(--b)}nav button{width:auto;white-space:nowrap}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:12px}}
+@media(max-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}header h2{font-size:18px}main{margin:12px auto}.card{padding:14px}}
+@media(max-width:380px){.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<section id="loginScreen" class="login">
-<div class="card">
-<h1 style="text-align:center">🛍️ সততা সপ</h1>
-<p class="small" style="text-align:center">অ্যাডমিন প্যানেল</p>
-<form id="loginForm">
-<label>অ্যাডমিন ইমেইল</label>
-<input id="email" type="email" autocomplete="username" required>
-<label>পাসওয়ার্ড</label>
-<input id="password" type="password" autocomplete="current-password" required>
-<button id="loginBtn" style="width:100%;margin-top:16px">লগইন করুন</button>
-</form>
-</div>
-</section>
+<header>
+  <h2>🛍️ সততা সপ — Admin</h2>
+  <button id="logoutBtn" class="secondary hidden">লগআউট</button>
+</header>
 
-<section id="admin" class="hidden">
-<header><h2>🛍️ সততা সপ — Admin</h2><button id="logout" class="danger">লগআউট</button></header>
-<div class="layout">
-<nav>
-<button class="active" data-page="dashboard">📊 ড্যাশবোর্ড</button>
-<button data-page="products">📦 পণ্য</button>
-<button data-page="orders">🧾 অর্ডার</button>
-<button data-page="settings">🖼️ লোগো ও ব্যানার</button>
-<button data-page="support">💬 সাপোর্ট</button>
-</nav>
 <main>
-<section id="page-dashboard" class="page">
-<h2>ড্যাশবোর্ড</h2>
-<div class="grid">
-<div class="stat"><span>মোট পণ্য</span><strong id="nProducts">0</strong></div>
-<div class="stat"><span>মোট অর্ডার</span><strong id="nOrders">0</strong></div>
-<div class="stat"><span>পেন্ডিং</span><strong id="nPending">0</strong></div>
-<div class="stat"><span>অনুমোদিত</span><strong id="nApproved">0</strong></div>
-</div>
-<div class="card"><h3 id="dashName">সততা সপ</h3><p id="dashPromo">প্রচারের লেখা</p></div>
-<div class="card small">পণ্যের ছবি Firebase Storage-এ আপলোড হবে না। GitHub Pages-এ ছবি রেখে তার URL পণ্যের ফর্মে দিতে হবে।</div>
-</section>
+  <div id="message" class="notice hidden"></div>
 
-<section id="page-products" class="page hidden">
-<h2>পণ্য ব্যবস্থাপনা</h2>
-<div class="card">
-<h3 id="formTitle">নতুন পণ্য যোগ করুন</h3>
-<form id="productForm">
-<input id="pid" type="hidden">
-<label>পণ্যের নাম *</label><input id="pname" required maxlength="150">
-<div class="row">
-<div><label>বিক্রয় মূল্য (৳) *</label><input id="price" type="number" min="0" step="0.01" required></div>
-<div><label>স্টক</label><input id="stock" type="number" min="0" step="1" value="0"></div>
-</div>
-<label>ক্যাটাগরি</label><input id="category" placeholder="যেমন: পোশাক">
-<label>পণ্যের বিবরণ</label><textarea id="description"></textarea>
-<label>ছবির URL (প্রতি লাইনে একটি)</label>
-<textarea id="imageUrls" placeholder="https://example.com/photo1.jpg&#10;https://example.com/photo2.jpg"></textarea>
-<p class="small">এক পণ্যে একাধিক ছবি দিতে পারবে। সম্পাদনার সময় URL ফাঁকা রাখলে আগের ছবিগুলো থাকবে।</p>
-<div id="preview"></div>
-<button id="saveProduct">পণ্য সংরক্ষণ করুন</button>
-<button id="cancelEdit" type="button" class="secondary hidden">বাতিল</button>
-</form>
-</div>
-<h3>পণ্যের তালিকা</h3><div id="productList">লোড হচ্ছে...</div>
-</section>
+  <section id="loginSection" class="card">
+    <h3>অ্যাডমিন লগইন</h3>
+    <p class="muted">শুধু অনুমোদিত অ্যাডমিন অ্যাকাউন্ট ব্যবহার করুন।</p>
+    <form id="loginForm">
+      <label for="email">অ্যাডমিন ইমেইল</label>
+      <input id="email" type="email" autocomplete="username" required>
+      <label for="password">পাসওয়ার্ড</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+      <button type="submit">লগইন করুন</button>
+    </form>
+  </section>
 
-<section id="page-orders" class="page hidden">
-<h2>অর্ডার ব্যবস্থাপনা</h2><div id="orderList">লোড হচ্ছে...</div>
-</section>
+  <section id="app">
+    <div class="grid" style="margin-bottom:18px">
+      <div class="stat"><span>মোট পণ্য</span><strong id="productCount">0</strong></div>
+      <div class="stat"><span>মোট অর্ডার</span><strong id="orderCount">0</strong></div>
+      <div class="stat"><span>অপেক্ষমাণ অর্ডার</span><strong id="pendingCount">0</strong></div>
+      <div class="stat"><span>সম্পন্ন অর্ডারের বিক্রি</span><strong id="salesTotal">৳0</strong></div>
+    </div>
 
-<section id="page-settings" class="page hidden">
-<h2>ওয়েবসাইট সেটিংস</h2>
-<div class="card"><form id="settingsForm">
-<label>ওয়েবসাইটের নাম</label><input id="siteName" value="সততা সপ">
-<label>প্রচারের লেখা</label><textarea id="promoText"></textarea>
-<label>লোগোর ছবির URL</label><input id="logoUrl" type="url" placeholder="https://...">
-<img id="logoPreview" class="preview hidden" alt="লোগো">
-<label>ব্যানারের ছবির URL</label><input id="bannerUrl" type="url" placeholder="https://...">
-<img id="bannerPreview" class="preview hidden" alt="ব্যানার">
-<button id="saveSettings">সেটিংস সংরক্ষণ করুন</button>
-</form></div>
-</section>
+    <div class="tabs">
+      <button class="active" data-tab="productsTab">পণ্য</button>
+      <button data-tab="ordersTab">অর্ডার</button>
+      <button data-tab="settingsTab">সেটিংস</button>
+    </div>
 
-<section id="page-support" class="page hidden">
-<h2>সাপোর্ট সেটিংস</h2><div class="card"><form id="supportForm">
-<label>WhatsApp নম্বর</label><input id="whatsappNumber" placeholder="8801XXXXXXXXX">
-<label>WhatsApp লিংক</label><input id="whatsappLink" type="url" placeholder="https://wa.me/...">
-<label>Telegram লিংক</label><input id="telegramLink" placeholder="https://t.me/...">
-<label>Facebook পেজ</label><input id="facebookLink" type="url" placeholder="https://facebook.com/...">
-<label>IMO নম্বর</label><input id="imoNumber">
-<label>সাপোর্ট বার্তা</label><textarea id="supportText"></textarea>
-<button id="saveSupport">সাপোর্ট সংরক্ষণ করুন</button>
-</form></div>
-</section>
+    <section id="productsTab" class="card">
+      <h3 id="productFormTitle">নতুন পণ্য যোগ করুন</h3>
+      <form id="productForm">
+        <input id="productId" type="hidden">
+        <label for="productName">পণ্যের নাম *</label>
+        <input id="productName" required maxlength="150" placeholder="যেমন: টি-শার্ট">
+        <div class="row">
+          <div><label for="productPrice">বিক্রয়মূল্য (৳) *</label><input id="productPrice" type="number" min="0" step="0.01" required></div>
+          <div><label for="productStock">স্টক সংখ্যা</label><input id="productStock" type="number" min="0" step="1" value="0"></div>
+        </div>
+        <label for="productCategory">ক্যাটাগরি</label>
+        <input id="productCategory" maxlength="100" placeholder="যেমন: পোশাক">
+        <label for="productDescription">পণ্যের বিবরণ</label>
+        <textarea id="productDescription" maxlength="5000" placeholder="পণ্যের বিবরণ লিখুন"></textarea>
+        <label for="productImages">ছবির URL (প্রতি লাইনে একটি)</label>
+        <textarea id="productImages" placeholder="https://example.com/product-front.jpg&#10;https://example.com/product-back.jpg"></textarea>
+        <p class="muted">ছবিগুলো আগে GitHub বা অন্য কোনো সরাসরি-লিংক সমর্থিত হোস্টে আপলোড করে URL দিন। Firebase Storage দরকার নেই।</p>
+        <button type="submit" id="saveProductBtn">পণ্য সেভ করুন</button>
+        <button type="button" id="cancelEditBtn" class="secondary hidden">এডিট বাতিল</button>
+      </form>
+      <hr style="border:0;border-top:1px solid #e4e9e5;margin:22px 0">
+      <h3>পণ্যের তালিকা</h3>
+      <div id="productsList">লোড হচ্ছে...</div>
+    </section>
+
+    <section id="ordersTab" class="card hidden">
+      <h3>সকল অর্ডার</h3>
+      <label for="orderFilter">স্ট্যাটাস অনুযায়ী দেখুন</label>
+      <select id="orderFilter">
+        <option value="all">সব অর্ডার</option>
+        <option value="pending">অপেক্ষমাণ</option>
+        <option value="approved">অনুমোদিত</option>
+        <option value="processing">প্রসেসিং</option>
+        <option value="shipped">পাঠানো হয়েছে</option>
+        <option value="delivered">ডেলিভারি সম্পন্ন</option>
+        <option value="cancelled">বাতিল</option>
+      </select>
+      <div id="ordersList">লোড হচ্ছে...</div>
+    </section>
+
+    <section id="settingsTab" class="card hidden">
+      <h3>দোকানের সেটিংস</h3>
+      <form id="settingsForm">
+        <label for="siteName">দোকানের নাম</label>
+        <input id="siteName" maxlength="150" placeholder="সততা সপ">
+        <label for="promoText">প্রচারমূলক লেখা</label>
+        <textarea id="promoText" maxlength="1000" placeholder="আপনার পছন্দের পণ্য কিনুন"></textarea>
+        <label for="logoUrl">লোগোর URL</label>
+        <input id="logoUrl" type="url" placeholder="https://example.com/logo.png">
+        <label for="bannerUrl">ব্যানারের URL</label>
+        <input id="bannerUrl" type="url" placeholder="https://example.com/banner.jpg">
+        <label for="whatsappNumber">WhatsApp নম্বর</label>
+        <input id="whatsappNumber" placeholder="দেশের কোডসহ নম্বর">
+        <label for="whatsappLink">WhatsApp লিংক</label>
+        <input id="whatsappLink" type="url" placeholder="https://wa.me/...">
+        <label for="facebookLink">Facebook লিংক</label>
+        <input id="facebookLink" type="url" placeholder="https://facebook.com/...">
+        <label for="telegramLink">Telegram লিংক</label>
+        <input id="telegramLink" type="url" placeholder="https://t.me/...">
+        <label for="imoNumber">IMO নম্বর</label>
+        <input id="imoNumber" placeholder="সাপোর্ট নম্বর">
+        <label for="supportText">সাপোর্টের তথ্য</label>
+        <textarea id="supportText" maxlength="2000"></textarea>
+        <button type="submit">সেটিংস সেভ করুন</button>
+      </form>
+    </section>
+  </section>
 </main>
-</div>
-</section>
-<div id="msg" class="hidden" role="status"></div>
 
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-import {getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-import {getFirestore,collection,doc,addDoc,updateDoc,deleteDoc,setDoc,onSnapshot,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+import {
+  getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+import {
+  getFirestore, collection, doc, getDocs, getDoc,
+  addDoc, setDoc, updateDoc, deleteDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/13.0.0/firebase-firestore.js";
 
-/* Firebase Console-এর Web App config-এর সঙ্গে মিলিয়ে নেবেন */
-const firebaseConfig={
- apiKey:"AIzaSyDHHTt4EFkH_H5xc2q2rGTC2piSCjO2uKM",
- authDomain:"satata-shop.firebaseapp.com",
- projectId:"satata-shop",
- storageBucket:"satata-shop.firebasestorage.app",
- messagingSenderId:"964264833764",
- appId:"1:964264833764:web:7c77ae2f3cb8c782abf2f1",
- measurementId:"G-1H2H45YG3D"
+/* Firebase Console-এর Web App configuration-এর সঙ্গে মিলিয়ে নিন। */
+const firebaseConfig = {
+  apiKey: "AIzaSyDHHTt4EFk_H5xc2q2rGTC2piSCjO2uKM",
+  authDomain: "satata-shop.firebaseapp.com",
+  projectId: "satata-shop",
+  storageBucket: "satata-shop.firebasestorage.app",
+  messagingSenderId: "964264833764",
+  appId: "1:964264833764:web:7c77ae2f3cb8c782abf2f1",
+  measurementId: "G-1H2H45YG3D"
 };
-const ADMIN_EMAILS=["nahidulislam01832@gmail.com"];
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-const $=id=>document.getElementById(id);
-let products=[],orders=[],settings={},stopP,stopO,stopS;
 
-function message(t){$("msg").textContent=t;$("msg").classList.remove("hidden");clearTimeout(message.timer);message.timer=setTimeout(()=>$("msg").classList.add("hidden"),4500)}
-function safe(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function money(v){return "৳"+(Number(v)||0)}
-function errorText(e){const m={"auth/invalid-credential":"ইমেইল বা পাসওয়ার্ড সঠিক নয়।","auth/invalid-email":"সঠিক ইমেইল দিন।","auth/too-many-requests":"অনেকবার চেষ্টা হয়েছে। পরে আবার চেষ্টা করুন।","permission-denied":"Firestore Rules অনুমতি দিচ্ছে না।","unavailable":"ইন্টারনেট বা Firebase সংযোগে সমস্যা।"};return m[e?.code]||e?.message||"একটি সমস্যা হয়েছে।"}
-function busy(id,on,text){const b=$(id);if(on){b.dataset.old=b.textContent;b.textContent=text;b.disabled=true}else{b.textContent=b.dataset.old||b.textContent;b.disabled=false}}
+/* Firebase Console-এ তৈরি করা অনুমোদিত অ্যাডমিন ইমেইল। */
+const ADMIN_EMAILS = ["nahidulislam01832@gmail.com"];
 
-$("loginForm").addEventListener("submit",async e=>{e.preventDefault();busy("loginBtn",true,"লগইন হচ্ছে...");try{await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value)}catch(err){message("লগইন হয়নি: "+errorText(err))}finally{busy("loginBtn",false)}});
-$("logout").onclick=()=>signOut(auth).catch(e=>message(errorText(e)));
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
-onAuthStateChanged(auth,async user=>{
- if(!user){stopListeners();$("admin").classList.add("hidden");$("loginScreen").classList.remove("hidden");return}
- if(!ADMIN_EMAILS.includes((user.email||"").toLowerCase())){await signOut(auth);message("এই ইমেইল অ্যাডমিন হিসেবে অনুমোদিত নয়।");return}
- $("loginScreen").classList.add("hidden");$("admin").classList.remove("hidden");startListeners();
+const $ = id => document.getElementById(id);
+let products = [];
+let orders = [];
+let loadingData = false;
+
+function showMessage(message, error = false) {
+  const box = $("message");
+  box.textContent = message;
+  box.classList.remove("hidden");
+  box.style.background = error ? "#ffebee" : "#fff4d6";
+  box.style.color = error ? "#a31515" : "#6b4d00";
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
+function clearMessage() {
+  $("message").classList.add("hidden");
+  $("message").textContent = "";
+}
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  })[char]);
+}
+function money(value) {
+  const n = Number(value);
+  return "৳" + (Number.isFinite(n) ? n.toLocaleString("en-BD") : "0");
+}
+function dateText(value) {
+  try {
+    if (value && typeof value.toDate === "function") {
+      return value.toDate().toLocaleString("bn-BD");
+    }
+    if (value) return new Date(value).toLocaleString("bn-BD");
+  } catch {}
+  return "তারিখ নেই";
+}
+function friendlyError(error) {
+  const code = error?.code || "";
+  if (code.includes("permission-denied")) {
+    return "Firestore অনুমতি দেয়নি। Firebase Console → Firestore Database → Rules পরীক্ষা করুন।";
+  }
+  if (code.includes("invalid-credential") || code.includes("wrong-password") ||
+      code.includes("user-not-found")) {
+    return "ইমেইল বা পাসওয়ার্ড সঠিক নয়। Firebase Authentication-এ অ্যাকাউন্ট আছে কি না দেখুন।";
+  }
+  if (code.includes("invalid-api-key")) {
+    return "Firebase API key ভুল। Console থেকে সঠিক Web App config কপি করুন।";
+  }
+  if (code.includes("network-request-failed")) {
+    return "ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।";
+  }
+  return `${error?.message || "অজানা সমস্যা"}${code ? " (" + code + ")" : ""}`;
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage();
+  const email = $("email").value.trim().toLowerCase();
+  const password = $("password").value;
+  if (!ADMIN_EMAILS.includes(email)) {
+    showMessage("এই ইমেইলটি অ্যাডমিন হিসেবে অনুমোদিত নয়।", true);
+    return;
+  }
+  const btn = $("loginForm").querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = "লগইন হচ্ছে...";
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    showMessage(friendlyError(error), true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "লগইন করুন";
+  }
 });
-function stopListeners(){[stopP,stopO,stopS].forEach(f=>{if(f)f()});stopP=stopO=stopS=null}
-function startListeners(){stopListeners();
- stopP=onSnapshot(collection(db,"products"),s=>{products=s.docs.map(d=>({id:d.id,...d.data()}));renderProducts();stats()},e=>message("পণ্য লোড হয়নি: "+errorText(e)));
- stopO=onSnapshot(collection(db,"orders"),s=>{orders=s.docs.map(d=>({id:d.id,...d.data()}));renderOrders();stats()},e=>message("অর্ডার লোড হয়নি: "+errorText(e)));
- stopS=onSnapshot(doc(db,"settings","site"),s=>{settings=s.exists()?s.data():{};fillSettings()},e=>message("সেটিংস লোড হয়নি: "+errorText(e)));
-}
-function stats(){$("nProducts").textContent=products.length;$("nOrders").textContent=orders.length;$("nPending").textContent=orders.filter(o=>String(o.status||"pending").toLowerCase()==="pending").length;$("nApproved").textContent=orders.filter(o=>["approved","confirmed","অনুমোদিত","completed","delivered"].includes(String(o.status||"").toLowerCase())).length}
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));$("page-"+b.dataset.page).classList.remove("hidden");document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("active",x===b))});
 
-function imgs(p){if(Array.isArray(p.images)&&p.images.length)return p.images;if(p.image)return[p.image];if(p.imageUrl)return[p.imageUrl];return[]}
-function renderProducts(){
- const el=$("productList");if(!products.length){el.innerHTML='<div class="card">এখনো কোনো পণ্য নেই।</div>';return}
- el.innerHTML=products.map(p=>{let im=imgs(p)[0];return `<div class="item">${im?`<img src="${safe(im)}" alt="">`:""}<div class="item-info"><b>${safe(p.name||p.title||"নামহীন পণ্য")}</b><p>${money(p.price)} · স্টক: ${safe(p.stock??0)}</p><span class="small">${safe(p.category||"")}</span></div><div class="actions"><button class="secondary" data-edit="${safe(p.id)}">সম্পাদনা</button><button class="danger" data-del="${safe(p.id)}">মুছুন</button></div></div>`}).join("");
- el.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editProduct(b.dataset.edit));
- el.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>removeProduct(b.dataset.del));
-}
-function editProduct(id){const p=products.find(x=>x.id===id);if(!p)return;$("pid").value=p.id;$("pname").value=p.name||p.title||"";$("price").value=p.price??"";$("stock").value=p.stock??0;$("category").value=p.category||"";$("description").value=p.description||"";$("imageUrls").value=imgs(p).join("\n");$("formTitle").textContent="পণ্য সম্পাদনা করুন";$("saveProduct").textContent="পরিবর্তন সংরক্ষণ করুন";$("cancelEdit").classList.remove("hidden");showPage("products")}
-function showPage(name){document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));$("page-"+name).classList.remove("hidden");document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name))}
-function resetProduct(){$("productForm").reset();$("pid").value="";$("stock").value=0;$("formTitle").textContent="নতুন পণ্য যোগ করুন";$("saveProduct").textContent="পণ্য সংরক্ষণ করুন";$("cancelEdit").classList.add("hidden");$("preview").innerHTML=""}
-$("cancelEdit").onclick=resetProduct;
-$("imageUrls").addEventListener("input",()=>{const urls=$("imageUrls").value.split(/\n/).map(x=>x.trim()).filter(Boolean);$("preview").innerHTML=urls.map(u=>`<img class="preview" src="${safe(u)}" alt="ছবির প্রিভিউ">`).join("")});
-$("productForm").addEventListener("submit",async e=>{
- e.preventDefault();busy("saveProduct",true,"সংরক্ষণ হচ্ছে...");
- try{
-  const old=products.find(p=>p.id===$("pid").value),entered=$("imageUrls").value.split(/\n/).map(x=>x.trim()).filter(Boolean),imageList=entered.length?entered:(old?imgs(old):[]);
-  for(const u of imageList){const x=new URL(u);if(!["http:","https:"].includes(x.protocol))throw new Error("ছবির URL http:// অথবা https:// দিয়ে শুরু হতে হবে।")}
-  const name=$("pname").value.trim();
-  const data={name,title:name,price:Number($("price").value),stock:Math.max(0,Number($("stock").value)||0),category:$("category").value.trim(),description:$("description").value.trim(),images:imageList,image:imageList[0]||"",updatedAt:serverTimestamp()};
-  if(old){await updateDoc(doc(db,"products",old.id),data);message("পণ্য আপডেট হয়েছে।")}else{data.createdAt=serverTimestamp();await addDoc(collection(db,"products"),data);message("নতুন পণ্য যোগ হয়েছে।")}
-  resetProduct();
- }catch(err){message("পণ্য সংরক্ষণ হয়নি: "+errorText(err))}finally{busy("saveProduct",false)}
+$("logoutBtn").addEventListener("click", async () => {
+  try { await signOut(auth); }
+  catch (error) { showMessage(friendlyError(error), true); }
 });
-async function removeProduct(id){const p=products.find(x=>x.id===id);if(!p||!confirm("এই পণ্যটি মুছে ফেলবেন?"))return;try{await deleteDoc(doc(db,"products",id));message("পণ্য মুছে ফেলা হয়েছে।")}catch(e){message(errorText(e))}}
 
-function renderOrders(){
- const el=$("orderList");if(!orders.length){el.innerHTML='<div class="card">এখনো কোনো অর্ডার নেই।</div>';return}
- el.innerHTML=orders.map(o=>{const name=o.customerName||o.name||"গ্রাহক",phone=o.mobile||o.phone||"",product=o.productName||o.nameOfProduct||"পণ্য",total=o.totalPrice??o.total??o.price??0,addr=[o.village,o.thana,o.district,o.address].filter(Boolean).join(", "),status=o.status||"pending";
- return `<div class="card"><div class="row"><div><b>${safe(name)}</b><p>${safe(phone)}</p></div><div><b>${money(total)}</b><p class="small">${safe(status)}</p></div></div><p>পণ্য: ${safe(product)} · পরিমাণ: ${safe(o.quantity??1)}</p><p class="small">ঠিকানা: ${safe(addr||"দেওয়া হয়নি")}</p><div class="row"><select id="status-${safe(o.id)}"><option value="pending" ${status==="pending"?"selected":""}>পেন্ডিং</option><option value="approved" ${status==="approved"?"selected":""}>অনুমোদিত</option><option value="cancelled" ${status==="cancelled"?"selected":""}>বাতিল</option><option value="completed" ${status==="completed"?"selected":""}>সম্পন্ন</option><option value="delivered" ${status==="delivered"?"selected":""}>ডেলিভারি হয়েছে</option></select><button data-order="${safe(o.id)}">স্ট্যাটাস সেভ</button></div></div>`}).join("");
- el.querySelectorAll("[data-order]").forEach(b=>b.onclick=async()=>{const id=b.dataset.order;try{await updateDoc(doc(db,"orders",id),{status:$("status-"+id).value,updatedAt:serverTimestamp()});message("অর্ডার আপডেট হয়েছে।")}catch(e){message("স্ট্যাটাস সেভ হয়নি: "+errorText(e))}});
+onAuthStateChanged(auth, async user => {
+  $("loginSection").style.display = "none";
+  $("app").style.display = "none";
+  $("logoutBtn").classList.add("hidden");
+
+  if (!user) {
+    $("loginSection").style.display = "block";
+    return;
+  }
+  if (!ADMIN_EMAILS.includes((user.email || "").toLowerCase())) {
+    await signOut(auth);
+    showMessage("এই অ্যাকাউন্টটি অ্যাডমিন হিসেবে অনুমোদিত নয়।", true);
+    $("loginSection").style.display = "block";
+    return;
+  }
+
+  $("app").style.display = "block";
+  $("logoutBtn").classList.remove("hidden");
+  await loadAll();
+});
+
+document.querySelectorAll("[data-tab]").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll("[data-tab]").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+    ["productsTab","ordersTab","settingsTab"].forEach(id =>
+      $(id).classList.toggle("hidden", id !== button.dataset.tab)
+    );
+  });
+});
+
+async function loadAll() {
+  if (loadingData) return;
+  loadingData = true;
+  clearMessage();
+  $("productsList").textContent = "পণ্য লোড হচ্ছে...";
+  $("ordersList").textContent = "অর্ডার লোড হচ্ছে...";
+  try {
+    const [productSnap, orderSnap] = await Promise.all([
+      getDocs(collection(db, "products")),
+      getDocs(collection(db, "orders"))
+    ]);
+    products = productSnap.docs.map(d => ({id:d.id, ...d.data()}));
+    orders = orderSnap.docs.map(d => ({id:d.id, ...d.data()}));
+    renderProducts();
+    renderOrders();
+    updateStats();
+    await loadSettings();
+  } catch (error) {
+    showMessage("ডেটা লোড করা যায়নি: " + friendlyError(error), true);
+  } finally {
+    loadingData = false;
+  }
 }
-function setPreview(id,url){const el=$(id);if(url){el.src=url;el.classList.remove("hidden")}else{el.removeAttribute("src");el.classList.add("hidden")}}
-function fillSettings(){const s=settings;$("siteName").value=s.siteName||"সততা সপ";$("promoText").value=s.promoText||"";$("logoUrl").value=s.logoUrl||"";$("bannerUrl").value=s.bannerUrl||"";$("whatsappNumber").value=s.whatsappNumber||"";$("whatsappLink").value=s.whatsappLink||"";$("telegramLink").value=s.telegramLink||"";$("facebookLink").value=s.facebookLink||"";$("imoNumber").value=s.imoNumber||"";$("supportText").value=s.supportText||"";$("dashName").textContent=s.siteName||"সততা সপ";$("dashPromo").textContent=s.promoText||"প্রচারের লেখা সেট করা হয়নি";setPreview("logoPreview",s.logoUrl);setPreview("bannerPreview",s.bannerUrl)}
-$("logoUrl").oninput=()=>setPreview("logoPreview",$("logoUrl").value.trim());
-$("bannerUrl").oninput=()=>setPreview("bannerPreview",$("bannerUrl").value.trim());
-$("settingsForm").addEventListener("submit",async e=>{e.preventDefault();busy("saveSettings",true,"সেভ হচ্ছে...");try{const data={siteName:$("siteName").value.trim()||"সততা সপ",promoText:$("promoText").value.trim(),logoUrl:$("logoUrl").value.trim(),bannerUrl:$("bannerUrl").value.trim(),updatedAt:serverTimestamp()};for(const k of ["logoUrl","bannerUrl"])if(data[k]&&!/^https?:\/\//i.test(data[k]))throw new Error("ছবির URL সঠিক নয়।");await setDoc(doc(db,"settings","site"),data,{merge:true});message("সেটিংস সেভ হয়েছে।")}catch(e){message(errorText(e))}finally{busy("saveSettings",false)}});
-$("supportForm").addEventListener("submit",async e=>{e.preventDefault();busy("saveSupport",true,"সেভ হচ্ছে...");try{await setDoc(doc(db,"settings","site"),{whatsappNumber:$("whatsappNumber").value.trim(),whatsappLink:$("whatsappLink").value.trim(),telegramLink:$("telegramLink").value.trim(),facebookLink:$("facebookLink").value.trim(),imoNumber:$("imoNumber").value.trim(),supportText:$("supportText").value.trim(),updatedAt:serverTimestamp()},{merge:true});message("সাপোর্ট সেটিংস সেভ হয়েছে।")}catch(e){message(errorText(e))}finally{busy("saveSupport",false)}});
+
+function updateStats() {
+  $("productCount").textContent = products.length;
+  $("orderCount").textContent = orders.length;
+  $("pendingCount").textContent = orders.filter(o =>
+    (o.status || "pending") === "pending"
+  ).length;
+  const completedStatuses = ["delivered", "completed"];
+  const total = orders.reduce((sum, order) => {
+    if (completedStatuses.includes(String(order.status || "").toLowerCase())) {
+      return sum + Number(order.totalPrice ?? order.total ?? order.price ?? 0);
+    }
+    return sum;
+  }, 0);
+  $("salesTotal").textContent = money(total);
+}
+
+function renderProducts() {
+  const list = $("productsList");
+  if (!products.length) {
+    list.textContent = "এখনো কোনো পণ্য যোগ করা হয়নি।";
+    return;
+  }
+  list.innerHTML = products.map(p => {
+    const images = Array.isArray(p.images) ? p.images : (p.image ? [p.image] : []);
+    const safeImages = images.filter(url => typeof url === "string" && /^https?:\/\//i.test(url));
+    return `<div class="item">
+      <strong>${escapeHtml(p.name || p.title || "নামহীন পণ্য")}</strong>
+      <p>মূল্য: ${money(p.price)} | স্টক: ${escapeHtml(p.stock ?? 0)}</p>
+      <p>ক্যাটাগরি: ${escapeHtml(p.category || "নেই")}</p>
+      <p>${escapeHtml(p.description || "")}</p>
+      <div>${safeImages.map(url => `<img loading="lazy" src="${escapeHtml(url)}" alt="পণ্যের ছবি" onerror="this.style.display='none'">`).join("")}</div>
+      <div class="row">
+        <button class="light" data-edit-product="${escapeHtml(p.id)}">এডিট</button>
+        <button class="danger" data-delete-product="${escapeHtml(p.id)}">মুছে ফেলুন</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+$("productsList").addEventListener("click", async event => {
+  const editButton = event.target.closest("[data-edit-product]");
+  const deleteButton = event.target.closest("[data-delete-product]");
+  if (editButton) {
+    const p = products.find(item => item.id === editButton.dataset.editProduct);
+    if (!p) return;
+    $("productId").value = p.id;
+    $("productName").value = p.name || p.title || "";
+    $("productPrice").value = p.price ?? "";
+    $("productStock").value = p.stock ?? 0;
+    $("productCategory").value = p.category || "";
+    $("productDescription").value = p.description || "";
+    const images = Array.isArray(p.images) ? p.images : (p.image ? [p.image] : []);
+    $("productImages").value = images.join("\n");
+    $("productFormTitle").textContent = "পণ্য সম্পাদনা";
+    $("saveProductBtn").textContent = "পরিবর্তন সেভ করুন";
+    $("cancelEditBtn").classList.remove("hidden");
+    $("productFormTitle").scrollIntoView({behavior:"smooth"});
+  }
+  if (deleteButton) {
+    const id = deleteButton.dataset.deleteProduct;
+    if (!confirm("এই পণ্যটি মুছে ফেলতে চান?")) return;
+    try {
+      await deleteDoc(doc(db, "products", id));
+      products = products.filter(p => p.id !== id);
+      renderProducts();
+      updateStats();
+      showMessage("পণ্য মুছে ফেলা হয়েছে।");
+    } catch (error) {
+      showMessage("পণ্য মুছতে সমস্যা: " + friendlyError(error), true);
+    }
+  }
+});
+
+function resetProductForm() {
+  $("productForm").reset();
+  $("productId").value = "";
+  $("productStock").value = "0";
+  $("productFormTitle").textContent = "নতুন পণ্য যোগ করুন";
+  $("saveProductBtn").textContent = "পণ্য সেভ করুন";
+  $("cancelEditBtn").classList.add("hidden");
+}
+$("cancelEditBtn").addEventListener("click", resetProductForm);
+
+$("productForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage();
+  const name = $("productName").value.trim();
+  const price = Number($("productPrice").value);
+  const stock = Number($("productStock").value || 0);
+  const images = [...new Set($("productImages").value.split(/\n/)
+    .map(s => s.trim()).filter(Boolean))];
+
+  if (!name || !Number.isFinite(price) || price < 0 ||
+      !Number.isInteger(stock) || stock < 0) {
+    showMessage("পণ্যের নাম, মূল্য ও স্টক সঠিকভাবে লিখুন।", true);
+    return;
+  }
+  if (images.some(url => !/^https?:\/\/\S+$/i.test(url))) {
+    showMessage("প্রতিটি ছবির জন্য বৈধ http বা https URL দিন।", true);
+    return;
+  }
+
+  const data = {
+    name, title:name, price, stock,
+    category:$("productCategory").value.trim(),
+    description:$("productDescription").value.trim(),
+    images, image:images[0] || "",
+    updatedAt:serverTimestamp()
+  };
+  const id = $("productId").value;
+  const btn = $("saveProductBtn");
+  btn.disabled = true;
+  try {
+    if (id) {
+      await updateDoc(doc(db, "products", id), data);
+      showMessage("পণ্যের পরিবর্তন সেভ হয়েছে।");
+    } else {
+      data.createdAt = serverTimestamp();
+      await addDoc(collection(db, "products"), data);
+      showMessage("নতুন পণ্য যোগ হয়েছে।");
+    }
+    resetProductForm();
+    await loadAll();
+  } catch (error) {
+    showMessage("পণ্য সেভ করা যায়নি: " + friendlyError(error), true);
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+const statusLabels = {
+  pending:"অপেক্ষমাণ", approved:"অনুমোদিত", processing:"প্রসেসিং",
+  shipped:"পাঠানো হয়েছে", delivered:"ডেলিভারি সম্পন্ন",
+  completed:"সম্পন্ন", cancelled:"বাতিল"
+};
+const statusOptions = ["pending","approved","processing","shipped","delivered","cancelled"];
+
+function renderOrders() {
+  const filter = $("orderFilter").value;
+  const filtered = orders.filter(o => filter === "all" ||
+    String(o.status || "pending").toLowerCase() === filter);
+  if (!filtered.length) {
+    $("ordersList").textContent = "এই তালিকায় কোনো অর্ডার নেই।";
+    return;
+  }
+  $("ordersList").innerHTML = filtered.map(o => {
+    const status = String(o.status || "pending").toLowerCase();
+    const customer = o.customerName || o.name || o.customer || "নাম নেই";
+    const phone = o.customerPhone || o.phone || o.mobile || "";
+    const address = o.address || o.fullAddress || "";
+    const items = Array.isArray(o.items) ? o.items :
+      (Array.isArray(o.products) ? o.products : []);
+    const itemText = items.map(i => {
+      if (typeof i === "string") return i;
+      return `${i.name || i.title || "পণ্য"} × ${i.quantity || i.qty || 1}`;
+    }).join(", ");
+    const validStatus = statusOptions.includes(status) ? status : "pending";
+    return `<div class="item">
+      <strong>অর্ডার: ${escapeHtml(o.id)}</strong>
+      <p>গ্রাহক: ${escapeHtml(customer)}</p>
+      <p>মোবাইল: ${escapeHtml(phone)}</p>
+      <p>ঠিকানা: ${escapeHtml(address)}</p>
+      <p>পণ্য: ${escapeHtml(itemText || o.productName || "বিস্তারিত নেই")}</p>
+      <p>মোট: ${money(o.totalPrice ?? o.total ?? o.price ?? 0)}</p>
+      <p>তারিখ: ${escapeHtml(dateText(o.createdAt || o.orderDate))}</p>
+      <p>বর্তমান অবস্থা: <strong>${escapeHtml(statusLabels[status] || status)}</strong></p>
+      <label for="status-${escapeHtml(o.id)}">স্ট্যাটাস পরিবর্তন</label>
+      <select id="status-${escapeHtml(o.id)}" data-order-status="${escapeHtml(o.id)}">
+        ${statusOptions.map(s => `<option value="${s}" ${s === validStatus ? "selected" : ""}>${statusLabels[s]}</option>`).join("")}
+      </select>
+      <button data-save-order="${escapeHtml(o.id)}">স্ট্যাটাস সেভ</button>
+    </div>`;
+  }).join("");
+}
+
+$("orderFilter").addEventListener("change", renderOrders);
+
+$("ordersList").addEventListener("click", async event => {
+  const button = event.target.closest("[data-save-order]");
+  if (!button) return;
+  const id = button.dataset.saveOrder;
+  const select = $("ordersList").querySelector(`[data-order-status="${CSS.escape(id)}"]`);
+  if (!select) return;
+  const status = select.value;
+  try {
+    await updateDoc(doc(db, "orders", id), {
+      status, updatedAt:serverTimestamp()
+    });
+    const order = orders.find(o => o.id === id);
+    if (order) order.status = status;
+    renderOrders();
+    updateStats();
+    showMessage("অর্ডারের স্ট্যাটাস আপডেট হয়েছে।");
+  } catch (error) {
+    showMessage("অর্ডার আপডেট করা যায়নি: " + friendlyError(error), true);
+  }
+});
+
+async function loadSettings() {
+  const snap = await getDoc(doc(db, "settings", "site"));
+  const s = snap.exists() ? snap.data() : {};
+  $("siteName").value = s.siteName || "সততা সপ";
+  $("promoText").value = s.promoText || "";
+  $("logoUrl").value = s.logoUrl || "";
+  $("bannerUrl").value = s.bannerUrl || "";
+  $("whatsappNumber").value = s.whatsappNumber || "";
+  $("whatsappLink").value = s.whatsappLink || "";
+  $("facebookLink").value = s.facebookLink || "";
+  $("telegramLink").value = s.telegramLink || "";
+  $("imoNumber").value = s.imoNumber || "";
+  $("supportText").value = s.supportText || "";
+}
+
+$("settingsForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage();
+  const data = {
+    siteName:$("siteName").value.trim(),
+    promoText:$("promoText").value.trim(),
+    logoUrl:$("logoUrl").value.trim(),
+    bannerUrl:$("bannerUrl").value.trim(),
+    whatsappNumber:$("whatsappNumber").value.trim(),
+    whatsappLink:$("whatsappLink").value.trim(),
+    facebookLink:$("facebookLink").value.trim(),
+    telegramLink:$("telegramLink").value.trim(),
+    imoNumber:$("imoNumber").value.trim(),
+    supportText:$("supportText").value.trim(),
+    updatedAt:serverTimestamp()
+  };
+  for (const key of ["logoUrl","bannerUrl","whatsappLink","facebookLink","telegramLink"]) {
+    if (data[key] && !/^https?:\/\/\S+$/i.test(data[key])) {
+      showMessage("লোগো, ব্যানার ও লিংকের ঘরে বৈধ http/https URL দিন।", true);
+      return;
+    }
+  }
+  try {
+    await setDoc(doc(db, "settings", "site"), data, {merge:true});
+    showMessage("দোকানের সেটিংস সেভ হয়েছে।");
+  } catch (error) {
+    showMessage("সেটিংস সেভ করা যায়নি: " + friendlyError(error), true);
+  }
+});
 </script>
 </body>
 </html>
